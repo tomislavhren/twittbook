@@ -1,0 +1,31 @@
+.new-post__form-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width:100%;
+}
+
+.new-post__actions {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-self: flex-end;
+}
+
+.new-post__input, 
+.new-post__actions {
+       padding: 0 16px 16px 0;
+       width: 80%;
+}
+
+.new-post__card {
+    width: 54vw;
+}
+
+@media only screen and (max-width: 500px) {
+    .new-post__card {
+        width: 90vw;
+    }
+}  

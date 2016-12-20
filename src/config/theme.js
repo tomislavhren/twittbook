@@ -7,11 +7,11 @@ const theme = getMuiTheme({
         primary1Color: blue500,
         accent1Color: red500,
         textColor: darkBlack,
-        alternateTextColor: blue500,
+        alternateTextColor: white,
         canvasColor: white,
         borderColor: grey300,
         pickerHeaderColor: blue500,
-        shadowColor: fullBlack,
+        shadowColor: fullBlack
     },
     appBar: {
         height: 50,

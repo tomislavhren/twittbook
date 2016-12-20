@@ -9,9 +9,11 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={theme}>
-        <Header />
-        {this.props.children}
-        <Footer />
+        <div>
+          <Header />
+          {this.props.children}
+          <Footer />
+        </div>
       </MuiThemeProvider>
     );
   }
