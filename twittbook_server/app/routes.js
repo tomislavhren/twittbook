@@ -5,6 +5,10 @@ module.exports = function (app, passport, facebookApi) {
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function (req, res) {
+        if(req.user){
+           res.redirect('/profile');
+        }
+        
         res.render('index.ejs'); // load the index.ejs file
     });
 
@@ -94,30 +98,29 @@ module.exports = function (app, passport, facebookApi) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/profile', // redirect to the secure profile section
+        successRedirect: '/login-success', // redirect to the secure profile section
         failureRedirect: '/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
 
-    app.get('/post-to-feed', isLoggedIn, function (req, res) {
-
-        if (req.user && req.user.facebook.token) {
-            var respones = facebookApi.postToFacebook('test test', req.user.facebook.token)
-        }
-        console.log('User does\'t have facebook account');
-        res.redirect('/profile');
-
+    app.get('/login-success', function (req,res){
+        console.log(req.user);
+        var token = jwt.encode({ username: 'somedata'}, tokenSecret);
+        res.json({ token : token });
     })
 
-    app.get('/get-from-feed', isLoggedIn, function (req, res) {
+    app.post('/post-to-feed', isLoggedIn, function (req, res) {
 
         if (req.user && req.user.facebook.token) {
-            var respones = facebookApi.getFromFacebook('test test', req.user.facebook.token)
-            console.log(respones);
+            if(!req.body.hasOwnProperty('message')){
+                res.send('Error 400: Post syntax incorrect.');
+            }
+            console.log(req.body);
+            //var respones = facebookApi.postToFacebook(req.body.message, req.user.facebook.token)
         }
-
-
+        else{
         console.log('User does\'t have facebook account');
+        }
         res.redirect('/profile');
 
     })

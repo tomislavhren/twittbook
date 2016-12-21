@@ -1,11 +1,11 @@
 var configAuth = require('../config/auth');
- var https = require('https')
+var https = require('https')
 
 module.exports = {
-   
+
 
     postToFacebook: function (str, userToken) {
-       var fbreq = https.request({
+        var fbreq = https.request({
             host: 'graph.facebook.com',
             path: '/me/feed',
             method: 'POST'
@@ -19,24 +19,8 @@ module.exports = {
                 console.log('response end with status ' + fbres.status);
             });
         });
-        fbreq.end('message=' + "test test"
+        fbreq.end('message=' + str
             + '&access_token=' + userToken);
-        console.log('sent');
-    },
-
-   getFromFacebook: function (str, userToken) {
-       var fbreq = https.request({
-            host: 'graph.facebook.com',
-            path: '/me/feed',
-            method: 'GET'
-        }, function (respone) {
-            console.log(respone.statusCode)
-            respone.on('data', function (chunk) {
-                console.log('got chunk ' + chunk);
-                return chunk;
-            });
-        });
-         fbreq.end('access_token=' + userToken);
         console.log('sent');
     }
 }
