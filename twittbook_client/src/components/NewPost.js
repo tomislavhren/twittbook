@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
 import '../styles/NewPost.css';
-import SendIcon from 'react-material-icons/icons/content/send';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import ActionAndroid from 'material-ui/svg-icons/action/android';
+import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 
 class NewPost extends Component {
@@ -44,7 +42,7 @@ class NewPost extends Component {
                             label="Post"
                             labelPosition="before"
                             secondary={true}
-                            icon={<SendIcon />}
+                            icon={<IconButton iconClassName="mdi mdi-bell" />}
                             />
                     </div>
                 </div>

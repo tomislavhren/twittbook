@@ -3,7 +3,6 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import '../styles/PostCard.css';
-import HomeIcon from 'react-material-icons/icons/action/home';
 
 class PostCard extends Component {
     constructor(props) {

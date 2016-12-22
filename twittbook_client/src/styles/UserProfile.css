@@ -1,0 +1,43 @@
+.user-profile__container {
+    width: 56vw;
+    margin: auto;
+    padding-top: 128px;
+}
+
+.user-profile__card {
+}
+
+.user-profile__actions {
+    background: #2196f3;
+    height: 64px;
+    text-align: center;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-profile__header {
+    padding: 24px 32px !important;
+}
+
+.user-profile__image {
+    max-width: 320px;
+    opacity: .95;
+    padding: 0 32px;
+}
+
+#user-profile {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left:-30px;
+    bottom: 0;
+    right: 0;
+    filter: blur(20px) brightness(70%);
+}
+
+#user-profile img {
+ object-fit: contain;
+ width: 110%;
+}

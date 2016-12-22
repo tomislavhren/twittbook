@@ -7,7 +7,8 @@ class LoginPage extends Component {
             <div className="login-page__layout">
                 <div className="login-page__container">
                     <div className="login-page__logo">
-                        <img src="assets/twittbook_logo.png" alt="twittbook_logo"/>
+                        <img src="assets/twitter.svg" alt="twittbook_logo"/>
+                        <img src="assets/facebook.svg" alt="twittbook_logo"/>
                     </div>
                 </div>
             </div> 
