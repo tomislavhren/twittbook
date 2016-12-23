@@ -17,7 +17,6 @@ class PostCard extends Component {
 
     render() {
         let style = {
-            flexBasis: '25%',
             height: '120px'
         };
 
