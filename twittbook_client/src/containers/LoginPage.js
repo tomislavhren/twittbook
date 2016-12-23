@@ -2,13 +2,21 @@ import React, { Component } from 'react';
 import '../styles/LoginPage.css';
 import { connect } from 'react-redux';
 import FacebookLogin from 'react-facebook-login';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import SignInForm from '../components/SignInForm';
+import { singInUser } from '../actions/index';
 
 class LoginPage extends Component {
-    responseFacebook(response) {
-        console.log(response);
+    handleSubmit(formValues) {
+        this.props.singInUser(formValues);
     }
 
     render() {
+
+        const { handleSubmit } = this.props;
+
         return (
             <div className="login-page__layout">
                 <div className="login-page__container">
@@ -16,7 +24,8 @@ class LoginPage extends Component {
                         <img src="assets/twitter.svg" alt="twittbook_logo" />
                         <img src="assets/facebook.svg" alt="twittbook_logo" />
                     </div>
-                    <div>
+                    <div className="login-page__form">
+                        {/*
                         <FacebookLogin
                             appId="1759502397705552"
                             autoLoad={true}
@@ -25,6 +34,8 @@ class LoginPage extends Component {
                             cssClass="my-facebook-button-class"
                             icon="fa-facebook"
                             />
+                        */}
+                        <SignInForm onSubmit={this.handleSubmit.bind(this)} />
                     </div>
                 </div>
             </div >
@@ -32,4 +43,4 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+export default connect(null, { singInUser })(LoginPage);

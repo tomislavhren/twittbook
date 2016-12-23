@@ -20,6 +20,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var configDB = require('./config/database.js');
 var facebookApi = require('./app/facebook.js');
+var cors = require('cors');
 
 var formidable = require('formidable');
 var path = require('path');     //used for file path
@@ -35,6 +36,9 @@ app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+app.use(cors());
 
 app.use('/api', apiRoutes);
 

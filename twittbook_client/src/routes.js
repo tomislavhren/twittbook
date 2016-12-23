@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 
 // Components goes here:
 import App from './components/App';
-import LoginPage from './components/LoginPage';
+import LoginPage from './containers/LoginPage';
 import Home from './containers/Home';
 import UserProfile from './containers/UserProfile';
 

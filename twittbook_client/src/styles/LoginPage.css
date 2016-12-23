@@ -24,6 +24,25 @@
 }
 
 .login-page__logo img {
-    margin-right: 10px;
+    margin-right: 8px;
     height: 100px;
+    opacity: .6;
+}
+
+.login-page__form form {
+    margin-top: 24px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.login-page__form input {
+    color: white !important;
+}
+
+.login-page__login-button {
+    align-self: center;
+    margin-top: 16px;
 }

@@ -7,7 +7,7 @@ const theme = getMuiTheme({
         primary1Color: blue500,
         accent1Color: red500,
         textColor: darkBlack,
-        alternateTextColor: fullBlack,
+        alternateTextColor: white,
         canvasColor: white,
         borderColor: grey300,
         pickerHeaderColor: blue500,
