@@ -3,13 +3,11 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import '../styles/NewPost.css';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
+import SendIcon from 'material-ui/svg-icons/content/send';
 
 class NewPost extends Component {
     constructor(props) {
         super(props);
-
     }
 
     render() {
@@ -42,7 +40,8 @@ class NewPost extends Component {
                             label="Post"
                             labelPosition="before"
                             secondary={true}
-                            icon={<IconButton iconClassName="mdi mdi-bell" />}
+                            onClick={this.props.handleSubmit}
+                            icon={<SendIcon />}
                             />
                     </div>
                 </div>

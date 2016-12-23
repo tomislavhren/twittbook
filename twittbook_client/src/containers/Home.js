@@ -16,16 +16,26 @@ class Home extends Component {
         });
     }
 
-    onSubmit() {
-
+    handleSubmit() {
+        window.FB.api(
+            "/10211085892279068/friends",
+            function (response) {
+                console.log(response);
+                if (response && !response.error) {
+                    console.log(response);
+                }
+            }
+        );
     }
 
+
+
     render() {
-        
+
         return (
             <div className="home__container">
                 <div className="home-posts__new-post">
-                    <NewPost onSubmit={() => this.onSubmit.bind(this)} />
+                    <NewPost handleSubmit={() => this.handleSubmit()} />
                 </div>
                 <div className="home-posts__container">
                     <ul className="home-posts__list">
