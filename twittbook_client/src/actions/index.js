@@ -24,7 +24,13 @@ export function singInUser(credentials) {
             })
             .catch((err) => {
                 // error
-                dispatch(authError(err.response.data));
+                if (!err.response) {
+                    dispatch(authError({
+                        message: 'Login is temporarily unavailable. Please try again later.'
+                    }));
+                } else {
+                    dispatch(authError(err.response.data));
+                }
             })
             .then(() => {
                 dispatch(authInProgress(false));
