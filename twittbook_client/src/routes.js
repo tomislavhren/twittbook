@@ -9,7 +9,7 @@ import UserProfile from './containers/UserProfile';
 
 export default (
     <Route path="/" component={App}>
-        <IndexRoute component={LoginPage} />
+        <IndexRoute path="/" component={LoginPage} />
         <Route path="home" component={Home} />
         <Route path="user" component={UserProfile} />
     </Route>

@@ -7,6 +7,11 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 class SignInForm extends Component {
+    renderAlert() {
+        if (this.props.errorMessage)
+            return (<span>{this.props.errorMessage}</span>);
+    }
+    
     render() {
         let style = {
             floatingLabel: {
@@ -44,6 +49,7 @@ class SignInForm extends Component {
 
                 </div>
                 <div className="login-page__login-button">
+                    {this.renderAlert()}
                     <FlatButton
                         type="submit"
                         label="Log in"
@@ -55,7 +61,13 @@ class SignInForm extends Component {
     }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+        errorMessage: state.auth.error
+    }
+}
+
 export default reduxForm({
     form: 'LoginForm',
     fields: ['email', 'password']
-})(SignInForm);
+}, mapStateToProps)(SignInForm);

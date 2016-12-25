@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from './Header';
+import Header from '../containers/Header';
 import Footer from './Footer';
 import theme from '../config/theme';
 
