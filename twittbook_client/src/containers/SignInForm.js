@@ -5,13 +5,14 @@ import { reduxForm, Field } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import { singInUser } from '../actions/index';
+import CircularProgress from 'material-ui/CircularProgress';
 
 class SignInForm extends Component {
-    renderAlert() {
-        if (this.props.errorMessage)
-            return (<span>{this.props.errorMessage}</span>);
+    handleSubmit(formValues) {
+        this.props.singInUser(formValues);
     }
-    
+
     render() {
         let style = {
             floatingLabel: {
@@ -24,11 +25,10 @@ class SignInForm extends Component {
                 color: 'white'
             }
         };
-
         const { handleSubmit } = this.props;
 
         return (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
                 <div>
                     <Field
                         name="email"
@@ -48,11 +48,14 @@ class SignInForm extends Component {
                         floatingLabelStyle={{ ...style.floatingLabel }} />
 
                 </div>
+                <div className="login-page__error">
+                    {this.props.errorMessage ? this.props.errorMessage : ''}
+                </div>
                 <div className="login-page__login-button">
-                    {this.renderAlert()}
                     <FlatButton
                         type="submit"
                         label="Log in"
+                        icon={this.props.authInProgress ? <CircularProgress size={24} /> : ''}
                         style={{ ...style.loginBtn }}
                         />
                 </div>
@@ -61,13 +64,14 @@ class SignInForm extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+function mapStateToProps(state, ownProps) {
     return {
-        errorMessage: state.auth.error
+        errorMessage: state.auth.error ? state.auth.error.message : '',
+        authInProgress: state.auth.authInProgress
     }
 }
 
-export default reduxForm({
+export default connect(mapStateToProps, { singInUser })(reduxForm({
     form: 'LoginForm',
     fields: ['email', 'password']
-}, mapStateToProps)(SignInForm);
+})(SignInForm));

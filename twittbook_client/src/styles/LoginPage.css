@@ -46,3 +46,8 @@
     align-self: center;
     margin-top: 16px;
 }
+
+.login-page__error {
+    text-align: left;
+    color: white;
+}

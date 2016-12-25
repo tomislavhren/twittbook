@@ -12,12 +12,12 @@ module.exports = function (apiRoutes, jwt, formidable) {
             if (err) throw err;
 
             if (!user) {
-                res.json({ success: false, message: 'Authentication failed. User not found.' });
+                res.status(401).json({ success: false, message: 'User not found.' });
             } else if (user) {
 
                 // check if password matches
                 if (!user.validPassword(req.body.password)) {
-                    res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+                    res.status(401).json({ success: false, message: 'Wrong password.' });
                 } else {
 
                     // if user is found and password is right

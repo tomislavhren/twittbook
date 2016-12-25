@@ -5,14 +5,9 @@ import FacebookLogin from 'react-facebook-login';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import SignInForm from '../components/SignInForm';
-import { singInUser } from '../actions/index';
+import SignInForm from '../containers/SignInForm';
 
 class LoginPage extends Component {
-    handleSubmit(formValues) {
-        this.props.singInUser(formValues);
-    }
-
     render() {
 
         const { handleSubmit } = this.props;
@@ -35,7 +30,7 @@ class LoginPage extends Component {
                             icon="fa-facebook"
                             />
                         */}
-                        <SignInForm onSubmit={this.handleSubmit.bind(this)} />
+                        <SignInForm />
                     </div>
                 </div>
             </div >
@@ -43,4 +38,4 @@ class LoginPage extends Component {
     }
 }
 
-export default connect(null, { singInUser })(LoginPage);
+export default LoginPage;
