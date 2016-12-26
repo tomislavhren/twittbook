@@ -10,7 +10,7 @@ const AuthInitialState = {}
 const Auth = (state = AuthInitialState, action) => {
     switch (action.type) {
         case AUTH_USER:
-            return { ...state, isAuthenticated: true };
+            return { ...state, isAuthenticated: true, facebookAuth: action.facebookAuth };
         case UNAUTH_USER:
             return { ...state, isAuthenticated: false };
         case AUTH_ERROR:

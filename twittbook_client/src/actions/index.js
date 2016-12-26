@@ -16,7 +16,7 @@ export function singInUser(credentials) {
         axios.post(`${ROOT_URL}/login`, credentials)
             .then(res => {
                 // update state with isAuth
-                dispatch({ type: AUTH_USER });
+                dispatch({ type: AUTH_USER, facebookAuth: res.data.facebookAuth });
                 // save token
                 localStorage.setItem('token', res.data.token);
                 // redirect to home

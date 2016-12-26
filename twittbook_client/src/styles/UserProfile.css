@@ -1,3 +1,18 @@
+#user-profile {
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left:-30px;
+    bottom: 0;
+    right: 0;
+    filter: blur(20px) brightness(70%);
+}
+
+#user-profile img {
+ object-fit: contain;
+ width: 110%;
+}
+
 .user-profile__container {
     width: 56vw;
     margin: auto;
@@ -5,6 +20,7 @@
 }
 
 .user-profile__card {
+    position: relative;
 }
 
 .user-profile__actions {
@@ -18,26 +34,25 @@
 }
 
 .user-profile__header {
-    padding: 24px 32px !important;
+    padding: 24px 32px 12px 32px !important;
 }
 
 .user-profile__image {
     max-width: 320px;
     opacity: .95;
-    padding: 0 32px;
 }
 
-#user-profile {
-    position: fixed;
-    z-index: -1;
-    top: 0;
-    left:-30px;
-    bottom: 0;
-    right: 0;
-    filter: blur(20px) brightness(70%);
+.user-profile__image img {
+    object-fit: contain;
+    width: 100%;
 }
 
-#user-profile img {
- object-fit: contain;
- width: 110%;
+.user-profile__body {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 12px 32px 24px 32px !important;
+}
+
+.user-profile__content {
 }

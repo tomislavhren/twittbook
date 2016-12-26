@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/LoginPage.css';
 import { connect } from 'react-redux';
-import FacebookLogin from 'react-facebook-login';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -20,16 +19,6 @@ class LoginPage extends Component {
                         <img src="assets/facebook.svg" alt="twittbook_logo" />
                     </div>
                     <div className="login-page__form">
-                        {/*
-                        <FacebookLogin
-                            appId="1759502397705552"
-                            autoLoad={true}
-                            fields="name,email,picture"
-                            callback={this.responseFacebook}
-                            cssClass="my-facebook-button-class"
-                            icon="fa-facebook"
-                            />
-                        */}
                         <SignInForm />
                     </div>
                 </div>
