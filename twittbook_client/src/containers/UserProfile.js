@@ -31,7 +31,7 @@ class UserProfile extends Component {
         const fbPicture = fb.picture ? fb.picture.data.url : '';
         const fbAbout = fb.about || '';
         const fbName = fb.name || 'John Doe';
-        
+
         return (
             <div className="user-profile__container">
                 <Card
@@ -54,7 +54,7 @@ class UserProfile extends Component {
                                 fields="name,email,picture.type(large),about"
                                 scope="public_profile,user_about_me,email,user_birthday"
                                 callback={this.responseFacebook.bind(this)}
-                                cssClass="my-facebook-button-class"
+                                cssClass="btn btn-block btn-social btn-facebook"
                                 icon="fa-facebook"
                                 />
                         </div>
