@@ -4,22 +4,13 @@
   "dependencies": {
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.0.0",
-    "connect-flash": "~0.1.1",
-    "cookie-parser": "~1.0.0",
     "cors": "^2.8.1",
-    "ejs": "~0.8.5",
     "express": "~4.0.0",
     "express-session": "~1.0.0",
     "formidable": "latest",
-    "fs-extra": "^1.0.0",
     "jsonwebtoken": "latest",
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
-    "morgan": "~1.0.0",
-    "multer": "^1.2.1",
-    "passport": "~0.1.17",
-    "passport-facebook": "~1.0.2",
-    "passport-local": "~0.1.6",
-    "passport-twitter": "~1.0.2"
+    "morgan": "~1.0.0"
   }
 }

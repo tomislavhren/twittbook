@@ -1,5 +1,4 @@
 var User = require('../app/models/user');
-var facebookApi = require('../app/facebook.js');
 
 module.exports = function (apiRoutes, jwt, formidable) {
 
@@ -28,12 +27,53 @@ module.exports = function (apiRoutes, jwt, formidable) {
                     res.json({
                         success: true,
                         message: 'Hren stiže token :D',
-                        token: token
+                        token: token,
+                        user: user
                     });
                 }
 
             }
 
+        });
+    });
+
+    apiRoutes.post('/register', function (req, res) {
+
+        // find the user
+        console.log(req.body.email)
+        User.findOne({ 'local.email': req.body.email }, function (err, user) {
+
+            if (err) throw err;
+
+            if (user) {
+                res.status(401).json({ success: false, message: 'That email is already taken.' });
+            } else if (!req.body.password) {
+                res.status(401).json({ success: false, message: 'No password' });
+
+            } else {
+
+                var newUser = new User();
+
+                // set the user's local credentials
+                newUser.local.email = req.body.email;
+                newUser.local.password = newUser.generateHash(req.body.password);
+
+                // save the user
+                newUser.save(function (err) {
+                    if (err)
+                        throw err;
+                    var token = jwt.sign(newUser, 'slatkaTajna12');
+
+
+                    res.json({
+                        success: true,
+                        message: 'Hren stiže token :D',
+                        token: token,
+                        user: newUser
+                    });
+                });
+
+            }
         });
     });
 
@@ -72,56 +112,95 @@ module.exports = function (apiRoutes, jwt, formidable) {
         res.json({ message: 'Welcome to the coolest API on earth!' });
     });
 
-    apiRoutes.post('/add-FB', function (req, res) {
-        res.json({ message: 'Welcome to the coolest API on earth!' });
+    apiRoutes.post('/add-FB-account', function (req, res) {
+
+        console.log(req.body.email)
+        User.findOne({ 'local.email': req.body.email }, function (err, user) {
+
+            if (err) throw err;
+
+            if (!user) {
+                res.status(401).json({ success: false, message: 'User not found.' });
+            } else if (!req.body.facebook_data) {
+                res.status(401).json({ success: false, message: 'No facebook data.' });
+            } else if (user) {
+                console.log(JSON.parse(req.body.facebook_data));
+
+                user.facebook = JSON.parse(req.body.facebook_data)
+                user.facebook.lastTokenUpdate = new Date();
+
+                user.save(function (err) {
+                    if (err)
+                        throw err;
+
+                    res.json({
+                        success: true,
+                        message: 'User updated',
+                        user: user
+                    });
+                });
+            }
+        });
     });
 
-    apiRoutes.post('/post-to-feed', function (req, res) {
+    apiRoutes.post('/update-password', function (req, res) {
 
-        var form = new formidable.IncomingForm();
-        //Formidable uploads to operating systems tmp dir by default
-        form.uploadDir = "./img";       //set upload directory
-        form.keepExtensions = true;     //keep file extension
+        console.log(req.body.email)
+        User.findOne({ 'local.email': req.body.email }, function (err, user) {
 
-        form.parse(req, function (err, fields, files) {
-            res.writeHead(200, { 'content-type': 'text/plain' });
-            res.write('received upload:\n\n');
-            //TESTING
-            // console.log("file size: " + JSON.stringify(files.fileUploaded.size));
-            // console.log("file path: " + JSON.stringify(files.fileUploaded.path));
-            // console.log("file name: " + JSON.stringify(files.fileUploaded.name));
-            // console.log("file type: " + JSON.stringify(files.fileUploaded.type));
-            // console.log("astModifiedDate: " + JSON.stringify(files.fileUploaded.lastModifiedDate));
+            if (err) throw err;
 
-            //Formidable changes the name of the uploaded file
-            //Rename the file to its original name
-            // fs.rename(files.fileUploaded.path, './img/' + files.fileUploaded.name, function (err) {
-            //     if (err)
-            //         throw err;
-            //     console.log('renamed complete');
-            // });
+            if (!user) {
+                res.status(401).json({ success: false, message: 'User not found.' });
+            } else if (!req.body.password) {
+                res.status(401).json({ success: false, message: 'No password data.' });
+            } else if (user) {
+                console.log(JSON.parse(req.body.password));
 
-            User.findOne({ 'local.email': fields.email }, function (err, user) {
-                //console.log(user);
-                if (err) throw err;
+                user.local.password = user.generateHash(req.body.password)
 
-                if (user) {
+                user.save(function (err) {
+                    if (err)
+                        throw err;
 
-                    if (user && user.facebook.token) {
-                        if (!req.body.hasOwnProperty('message')) {
-                            //  res.send('Error 400: Post syntax incorrect.');
-                        }
-                        facebookApi.postToFacebook(fields.message, user.facebook.token)
-                        //  res.json({ message: 'Published to facebook' })
-                    }
-                    else {
-                        console.log('User does\'t have facebook account');
-                        // res.json({ message: 'User does\'t have facebook account' })
-                    }
-                }
-            })
-            res.end();
-
+                    res.json({
+                        success: true,
+                        message: 'User updated',
+                        user: user
+                    });
+                });
+            }
         });
-    })
-};
+    });
+
+    apiRoutes.post('/add-twitter-account', function (req, res) {
+
+        console.log(req.body.email)
+        User.findOne({ 'local.email': req.body.email }, function (err, user) {
+
+            if (err) throw err;
+
+            if (!user) {
+                res.status(401).json({ success: false, message: 'User not found.' });
+            } else if (!req.body.twitter_data) {
+                res.status(401).json({ success: false, message: 'No twitter data.' });
+            } else if (user) {
+                console.log(JSON.parse(req.body.twitter_data));
+
+                user.twitter = JSON.parse(req.body.twitter_data)
+                user.twitter.lastTokenUpdate = new Date();
+                
+                user.save(function (err) {
+                    if (err)
+                        throw err;
+
+                    res.json({
+                        success: true,
+                        message: 'User updated',
+                        user: user
+                    });
+                });
+            }
+        });
+    });
+}
