@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
+import { Card } from 'material-ui/Card';
 import '../styles/PostCard.css';
 
 class PostCard extends Component {
@@ -11,8 +9,17 @@ class PostCard extends Component {
         this.post = this.props.post;
     }
 
+    componentDidMount() {
+        const postTextContainerHeight = this.refs.postText.getBoundingClientRect().height;
+        const postTextScrollHeight = this.refs.postText.scrollHeight;
+        if (postTextScrollHeight > postTextContainerHeight) {
+            console.log(postTextContainerHeight);
+            console.log(postTextScrollHeight);
+        }
+    }
+
     formatTime(date) {
-        return new Date(date).toLocaleTimeString('hr').substr(0, 5);
+        return new Date(date).toLocaleString('hr', new Intl.Collator('hr'));
     }
 
     render() {
@@ -22,10 +29,11 @@ class PostCard extends Component {
 
         return (
             <div className="post--space-around">
-                <Card style={{ ...style }}
+                <Card
+                    style={{ ...style }}
                     className="post__card">
                     <div className="post__container">
-                        <div className="post__text">
+                        <div ref="postText" className="post__text">
                             {this.post.message}
                         </div>
                         <div className="post__provider-stamp">

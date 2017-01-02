@@ -6,7 +6,7 @@ import {
     AUTH_ERROR,
     AUTH_IN_PROGRESS,
     AUTH_DONE
-} from './types';
+} from '../constants/action_types';
 
 const ROOT_URL = 'http://localhost:8080/api';
 
@@ -47,9 +47,9 @@ export function signOutUser() {
     }
 }
 
-function authInProgress(isAuthInPromise) {
+function authInProgress(isAuthInProgress) {
     return {
-        type: isAuthInPromise ? AUTH_IN_PROGRESS : AUTH_DONE
+        type: isAuthInProgress ? AUTH_IN_PROGRESS : AUTH_DONE
     }
 }
 

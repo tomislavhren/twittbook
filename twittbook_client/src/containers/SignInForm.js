@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import { singInUser } from '../actions/index';
+import { singInUser } from '../actions/auth';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class SignInForm extends Component {

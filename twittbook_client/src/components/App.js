@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div>
-          <Header  />
+          <Header />
           {this.props.children}
           <Footer />
         </div>

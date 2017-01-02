@@ -4,7 +4,7 @@ import {
     AUTH_ERROR,
     AUTH_IN_PROGRESS,
     AUTH_DONE
-} from '../actions/types';
+} from '../constants/action_types';
 
 const AuthInitialState = {}
 const Auth = (state = AuthInitialState, action) => {

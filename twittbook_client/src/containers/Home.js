@@ -3,9 +3,14 @@ import PostCard from '../components/PostCard';
 import { connect } from 'react-redux';
 import '../styles/Home.css';
 import NewPost from '../components/NewPost';
+import { fetchPosts } from '../actions/posts';
 
 // responsible for fetching posts
 class Home extends Component {
+    componentWillMount() {
+        this.props.fetchPosts();
+    }
+
     renderPosts() {
         return this.props.posts.map(post => {
             return (
@@ -17,15 +22,15 @@ class Home extends Component {
     }
 
     handleSubmit() {
-        window.FB.api(
-            "/10211085892279068/friends",
-            function (response) {
-                console.log(response);
-                if (response && !response.error) {
-                    console.log(response);
-                }
-            }
-        );
+        // window.FB.api(
+        //     "/10211085892279068/friends",
+        //     function (response) {
+        //         console.log(response);
+        //         if (response && !response.error) {
+        //             console.log(response);
+        //         }
+        //     }
+        // );
     }
 
 
@@ -53,4 +58,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, { fetchPosts })(Home);

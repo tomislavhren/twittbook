@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/IconButton';
 import '../styles/UserProfile.css';
 import FacebookLogin from 'react-facebook-login';
 import fbAuth from '../config/facebookAuth';
+import graph from 'fb-react-sdk';
 
 // responsible for fetching posts
 class UserProfile extends Component {
@@ -23,6 +24,7 @@ class UserProfile extends Component {
 
     responseFacebook(res) {
         localStorage.setItem('facebook_data', JSON.stringify(res));
+        graph.setAccessToken(res.accessToken);
         this.setState({ facebook_data: JSON.parse(localStorage.getItem('facebook_data')) });
     }
 
@@ -52,7 +54,7 @@ class UserProfile extends Component {
                                 appId={fbAuth.clientId}
                                 autoLoad={true}
                                 fields="name,email,picture.type(large),about"
-                                scope="public_profile,user_about_me,email,user_birthday"
+                                scope="public_profile,user_about_me,email,user_birthday,user_posts"
                                 callback={this.responseFacebook.bind(this)}
                                 cssClass="btn btn-block btn-social btn-facebook"
                                 icon="fa-facebook"

@@ -10,7 +10,7 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 import promise from 'redux-promise';
 import reduxThunk from 'redux-thunk';
-import { AUTH_USER } from './actions/types';
+import { AUTH_USER } from './constants/action_types';
 
 injectTapEventPlugin();
 const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);

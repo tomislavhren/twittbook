@@ -19,9 +19,16 @@
 }
 
 .post__text {
-    font-size: 16px;
+    font-size: 14px;
     height: 100%;
     padding-top: 24px;
+    width: 100%;
+    display: block; /* Fallback for non-webkit */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post__provider-stamp {

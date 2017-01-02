@@ -23,3 +23,7 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     -webkit-box-shadow: 0 0 0 1000px #2196F3 inset !important;
     -webkit-text-fill-color: white !important;
 }
+
+div {
+  box-sizing: border-box !important;
+}
