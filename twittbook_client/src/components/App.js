@@ -7,6 +7,7 @@ import theme from '../config/theme';
 
 class App extends Component {
   render() {
+    console.info("%c App rendered", "color: green")
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div>

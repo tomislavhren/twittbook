@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 import '../styles/NewPost.css';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
 
 class NewPost extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const style = {
             position: 'absolute',
             top: '128px'
-        };
-
-        const buttonStyle = {
-            margin: 12,
-            color: 'white',
-            backgroundColor: 'white'
         };
 
         return (

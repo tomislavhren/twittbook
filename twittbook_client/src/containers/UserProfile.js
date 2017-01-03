@@ -1,35 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import FontIcon from 'material-ui/IconButton';
 import '../styles/UserProfile.css';
 import FacebookLogin from 'react-facebook-login';
 import fbAuth from '../config/facebookAuth';
-import graph from 'fb-react-sdk';
+import { addFacebookAccount } from '../actions/auth';
 
 // responsible for fetching posts
 class UserProfile extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            facebook_data: JSON.parse(localStorage.getItem('facebook_data')) || {}
-        };
-    }
-
-    componentWillMount() {
-        this.setState({ facebook_data: JSON.parse(localStorage.getItem('facebook_data')) });
-    }
-
-    responseFacebook(res) {
-        localStorage.setItem('facebook_data', JSON.stringify(res));
-        graph.setAccessToken(res.accessToken);
-        this.setState({ facebook_data: JSON.parse(localStorage.getItem('facebook_data')) });
+    responseFacebook(facebook_data) {
+        this.props.addFacebookAccount({
+            email: this.props.user.local.email,
+            facebook_data: JSON.stringify(facebook_data)
+        });
     }
 
     render() {
-        const fb = this.state.facebook_data ? this.state.facebook_data : {};
+        const fb = this.props.facebook ? this.props.facebook : {};
         const fbPicture = fb.picture ? fb.picture.data.url : '';
         const fbAbout = fb.about || '';
         const fbName = fb.name || 'John Doe';
@@ -47,12 +35,13 @@ class UserProfile extends Component {
                         />
                     <div className="user-profile__body">
                         <div className="user-profile__image">
-                            <img src={fbPicture} />
+                            <img src={fbPicture} role="presentation" />
                         </div>
                         <div className="user-profile__content">
                             <FacebookLogin
                                 appId={fbAuth.clientId}
                                 autoLoad={true}
+                                version="2.8"
                                 fields="name,email,picture.type(large),about"
                                 scope="public_profile,user_about_me,email,user_birthday,user_posts"
                                 callback={this.responseFacebook.bind(this)}
@@ -66,15 +55,18 @@ class UserProfile extends Component {
                         <FlatButton label="Twitter" />
                     </CardActions>
                 </Card>
-                <div id="user-profile"><img src={fbPicture} /></div>
+                <div id="user-profile"><img src={fbPicture} role="presentation" /></div>
             </div>
         );
     }
 }
 
 const mapStateToProps = (state, ownProps) => {
+    const { user, user: { facebook } } = state.auth;
     return {
+        user,
+        facebook
     };
 }
 
-export default connect(mapStateToProps)(UserProfile);
+export default connect(mapStateToProps, { addFacebookAccount })(UserProfile);

@@ -9,8 +9,7 @@ const ROOT_URL = 'http://localhost:8080/api';
 
 export function fetchPosts() {
     return (dispatch) => {
-        const fbData = JSON.parse(localStorage.getItem('facebook_data'));
-        graph.get('/me/posts', (res) => console.log(res));
+        // graph.get('/me/posts', (res) => console.log(res));
         // window.FB.api(
         //     `/${fbData.userID}/posts`,
         //     'GET',

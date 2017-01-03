@@ -9,6 +9,16 @@ import { singInUser } from '../actions/auth';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class SignInForm extends Component {
+    static contextTypes = {
+        router: React.PropTypes.object
+    }
+
+    componentWillMount() {
+        if (this.props.isAuthenticated) {
+            this.context.router.push('/home');
+        }
+    }
+
     handleSubmit(formValues) {
         this.props.singInUser(formValues);
     }
@@ -67,7 +77,8 @@ class SignInForm extends Component {
 function mapStateToProps(state, ownProps) {
     return {
         errorMessage: state.auth.error ? state.auth.error.message : '',
-        authInProgress: state.auth.authInProgress
+        authInProgress: state.auth.authInProgress,
+        isAuthenticated: state.auth.isAuthenticated
     }
 }
 
