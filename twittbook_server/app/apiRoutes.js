@@ -1,4 +1,5 @@
 var User = require('../app/models/user');
+var ConnectionStorage = require('../app/models/connection');
 
 module.exports = function (apiRoutes, jwt, formidable) {
 
@@ -22,16 +23,46 @@ module.exports = function (apiRoutes, jwt, formidable) {
                     // if user is found and password is right
                     // create a token
                     var token = jwt.sign(user, 'slatkaTajna12');
+                    ConnectionStorage.findOne({ 'data.email': user.local.email }, function (err, connection) {
 
-                    // return the information including token as JSON
-                    res.json({
-                        success: true,
-                        message: 'Hren stiže token :D',
-                        token: token,
-                        user: user
+                        if (err) throw err;
+
+                        if (!connection) {
+                            connection = new ConnectionStorage();
+                            connection.data.email = req.body.email;
+                            connection.data.token = token;
+                            console.log(connection);
+                            connection.save(function (err) {
+                                if (err)
+                                    throw err;
+
+                                res.json({
+                                    success: true,
+                                    message: 'Hren stiže token :D',
+                                    token: token,
+                                    user: user
+                                });
+                            });
+
+                        } else if (connection) {
+
+                            connection.data.token = token;
+                            console.log(connection);
+                            connection.save(function (err) {
+                                if (err)
+                                    throw err;
+
+                                res.json({
+                                    success: true,
+                                    message: 'Hren stiže token :D',
+                                    token: token,
+                                    user: user
+                                });
+                            });
+
+                        }
                     });
                 }
-
             }
 
         });
@@ -143,6 +174,47 @@ module.exports = function (apiRoutes, jwt, formidable) {
         });
     });
 
+    apiRoutes.post('/add-FB-account2', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (!req.body.facebook_data) {
+                        res.status(401).json({ success: false, message: 'No facebook data.' });
+                    } else if (user) {
+                        console.log(JSON.parse(req.body.facebook_data));
+
+                        user.facebook = JSON.parse(req.body.facebook_data)
+                        user.facebook.lastTokenUpdate = new Date();
+
+                        user.save(function (err) {
+                            if (err)
+                                throw err;
+
+                            res.json({
+                                success: true,
+                                message: 'User updated',
+                                user: user
+                            });
+                        });
+                    }
+                });
+            }
+
+        });
+
+    });
+
     apiRoutes.post('/update-password', function (req, res) {
 
         console.log(req.body.email)
@@ -173,6 +245,46 @@ module.exports = function (apiRoutes, jwt, formidable) {
         });
     });
 
+    apiRoutes.post('/update-password2', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+                User.findOne({ 'local.email': req.body.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (!req.body.password) {
+                        res.status(401).json({ success: false, message: 'No password data.' });
+                    } else if (user) {
+                        console.log(JSON.parse(req.body.password));
+
+                        user.local.password = user.generateHash(req.body.password)
+
+                        user.save(function (err) {
+                            if (err)
+                                throw err;
+
+                            res.json({
+                                success: true,
+                                message: 'User updated',
+                                user: user
+                            });
+                        });
+                    }
+                });
+            }
+
+        });
+
+    });
+
     apiRoutes.post('/add-twitter-account', function (req, res) {
 
         console.log(req.body.email)
@@ -189,7 +301,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
                 user.twitter = JSON.parse(req.body.twitter_data)
                 user.twitter.lastTokenUpdate = new Date();
-                
+
                 user.save(function (err) {
                     if (err)
                         throw err;
@@ -202,5 +314,46 @@ module.exports = function (apiRoutes, jwt, formidable) {
                 });
             }
         });
+    });
+
+    apiRoutes.post('/add-twitter-account2', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+                User.findOne({ 'local.email': req.body.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (!req.body.twitter_data) {
+                        res.status(401).json({ success: false, message: 'No twitter data.' });
+                    } else if (user) {
+                        console.log(JSON.parse(req.body.twitter_data));
+
+                        user.twitter = JSON.parse(req.body.twitter_data)
+                        user.twitter.lastTokenUpdate = new Date();
+
+                        user.save(function (err) {
+                            if (err)
+                                throw err;
+
+                            res.json({
+                                success: true,
+                                message: 'User updated',
+                                user: user
+                            });
+                        });
+                    }
+                });
+            }
+
+        });
+
     });
 }
