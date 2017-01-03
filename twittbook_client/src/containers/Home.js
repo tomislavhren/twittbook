@@ -3,7 +3,8 @@ import PostCard from '../components/PostCard';
 import { connect } from 'react-redux';
 import '../styles/Home.css';
 import NewPost from '../components/NewPost';
-import { fetchPosts } from '../actions/posts';
+import { fetchPosts, postAPost } from '../actions/posts';
+import Divider from 'material-ui/Divider';
 
 // responsible for fetching posts
 class Home extends Component {
@@ -12,40 +13,55 @@ class Home extends Component {
     }
 
     renderPosts() {
-        return this.props.posts.map(post => {
-            return (
-                <li key={post.id} className="home-posts__post">
-                    <PostCard post={post} />
-                </li>
+        let result = [];
+        //for each date
+        Object.keys(this.props.posts).forEach((date) => {
+            const postList_li = this.props.posts[date].map(post => {
+                return (
+                    <li key={post.id} className="home-posts__post post--space-around">
+                        <PostCard post={post} />
+                    </li>
+                );
+            });
+            const postList_ul = (
+                <ul className="home-posts__list">
+                    {postList_li}
+                </ul>
             );
+
+            const postSection = (
+                <div>
+                    <h3 className="home-posts__post-date">{date}</h3>
+                    {postList_ul}
+                </div>
+            );
+
+            result.push(postSection);
         });
+
+        return result;
+        // return this.props.posts.map(post => {
+        //     return (
+        //         <li key={post.id} className="home-posts__post">
+        //             <PostCard post={post} />
+        //         </li>
+        //     );
+        // });
     }
 
-    handleSubmit() {
-        // window.FB.api(
-        //     "/10211085892279068/friends",
-        //     function (response) {
-        //         console.log(response);
-        //         if (response && !response.error) {
-        //             console.log(response);
-        //         }
-        //     }
-        // );
+    handleSubmit(msg) {
+        this.props.postAPost(msg);
     }
-
-
 
     render() {
-
+        console.log("RENDERING");
         return (
             <div className="home__container">
                 <div className="home-posts__new-post">
-                    <NewPost handleSubmit={() => this.handleSubmit()} />
+                    <NewPost handleSubmit={(msg) => this.handleSubmit(msg)} />
                 </div>
                 <div className="home-posts__container">
-                    <ul className="home-posts__list">
-                        {this.renderPosts()}
-                    </ul>
+                    {this.renderPosts()}
                 </div>
             </div>
         );
@@ -58,4 +74,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 }
 
-export default connect(mapStateToProps, { fetchPosts })(Home);
+export default connect(mapStateToProps, { fetchPosts, postAPost })(Home);

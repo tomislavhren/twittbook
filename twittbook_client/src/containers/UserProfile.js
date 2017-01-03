@@ -10,6 +10,7 @@ import { addFacebookAccount } from '../actions/auth';
 // responsible for fetching posts
 class UserProfile extends Component {
     responseFacebook(facebook_data) {
+        localStorage.setItem('fbAccessToken', facebook_data.accessToken);
         this.props.addFacebookAccount({
             email: this.props.user.local.email,
             facebook_data: JSON.stringify(facebook_data)
@@ -18,9 +19,9 @@ class UserProfile extends Component {
 
     render() {
         const fb = this.props.facebook ? this.props.facebook : {};
-        const fbPicture = fb.picture ? fb.picture.data.url : '';
-        const fbAbout = fb.about || '';
-        const fbName = fb.name || 'John Doe';
+        const fbPicture = fb.picture ? fb.picture.data.url : './assets/user.jpg';
+        const fbAbout = fb.about || '...';
+        const fbName = fb.name || 'Please connect your Facebook and Twitter accounts.';
 
         return (
             <div className="user-profile__container">
@@ -43,7 +44,7 @@ class UserProfile extends Component {
                                 autoLoad={true}
                                 version="2.8"
                                 fields="name,email,picture.type(large),about"
-                                scope="public_profile,user_about_me,email,user_birthday,user_posts"
+                                scope="public_profile,user_about_me,email,user_birthday,user_posts,publish_actions"
                                 callback={this.responseFacebook.bind(this)}
                                 cssClass="btn btn-block btn-social btn-facebook"
                                 icon="fa-facebook"

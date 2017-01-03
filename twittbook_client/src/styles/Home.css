@@ -1,6 +1,6 @@
 .home-posts__container {
     margin: auto;
-    width: 56vw;
+    width: 52vw;
 }
 
 .home-posts__list {
@@ -27,7 +27,12 @@
 }
 
 .post--space-around {
-    margin: 24px 0 0 24px;
+    margin: 0 16px 16px 0;
+}
+
+.home-posts__post-date {
+    font-weight: 300;
+    color: rgba(0,0,0,.54);
 }
 
 @media only screen and (max-width: 500px) {

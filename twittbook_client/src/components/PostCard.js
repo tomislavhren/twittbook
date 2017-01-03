@@ -19,7 +19,7 @@ class PostCard extends Component {
     }
 
     formatTime(date) {
-        return new Date(date).toLocaleString('hr', new Intl.Collator('hr'));
+        return new Date(date).toLocaleTimeString('hr', new Intl.Collator('hr'));
     }
 
     render() {
@@ -28,20 +28,18 @@ class PostCard extends Component {
         };
 
         return (
-            <div className="post--space-around">
-                <Card
-                    style={{ ...style }}
-                    className="post__card">
-                    <div className="post__container">
-                        <div ref="postText" className="post__text">
-                            {this.post.message}
-                        </div>
-                        <div className="post__provider-stamp">
-                            {this.post.provider} &bull; {this.formatTime(this.post.created_time)}
-                        </div>
+            <Card
+                style={{ ...style }}
+                className="post__card">
+                <div className="post__container">
+                    <div ref="postText" className="post__text">
+                        {this.post.message}
                     </div>
-                </Card>
-            </div>
+                    <div className="post__provider-stamp">
+                        {this.post.provider} &bull; {this.formatTime(this.post.created_time)}
+                    </div>
+                </div>
+            </Card>
         );
     }
 }

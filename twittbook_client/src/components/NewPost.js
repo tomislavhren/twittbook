@@ -6,6 +6,12 @@ import FlatButton from 'material-ui/FlatButton';
 import SendIcon from 'material-ui/svg-icons/content/send';
 
 class NewPost extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            input: ''
+        };
+    }
     render() {
         const style = {
             position: 'absolute',
@@ -18,6 +24,7 @@ class NewPost extends Component {
                 <div className="new-post__form-container">
                     <div className="new-post__input">
                         <TextField
+                            onChange={evt => this.setState({ input: evt.target.value })}
                             floatingLabelText="What's on your mind?"
                             multiLine={true}
                             rows={2}
@@ -30,7 +37,7 @@ class NewPost extends Component {
                             label="Post"
                             labelPosition="before"
                             secondary={true}
-                            onClick={this.props.handleSubmit}
+                            onClick={() => this.props.handleSubmit(this.state.input)}
                             icon={<SendIcon />}
                             />
                     </div>
