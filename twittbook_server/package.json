@@ -12,6 +12,9 @@
     "method-override": "~1.0.0",
     "mongoose": "~3.8.1",
     "morgan": "~1.0.0",
-    "twit":"latest"
+    "twit": "latest",
+    "multer": "1.1.0",
+    "http": "latest",
+    "fs": "latest"
   }
 }

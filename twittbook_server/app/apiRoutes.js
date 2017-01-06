@@ -2,6 +2,8 @@ var User = require('../app/models/user');
 var ConnectionStorage = require('../app/models/connection');
 var Twit = require('twit');
 var configTwitter = require('../config/twitter.js');
+var path = require('path');
+var fs = require('fs');
 
 module.exports = function (apiRoutes, jwt, formidable) {
 
@@ -395,4 +397,77 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
     });
 
+    apiRoutes.post('/twitter-status-with-image', function (req, res) {
+        var form = new formidable.IncomingForm();
+        form.parse(req, function (err, fields, files) {
+
+            console.log(files);
+            var old_path = files.image.path;
+            var new_path = path.join('../uploads/', files.image.name);
+
+            fs.readFile(old_path, function (err, data) {
+                fs.writeFile(new_path, data, function (err) {
+                    fs.unlink(old_path, function (err) {
+                        if (err) {
+                            res.status(500);
+                            res.json({ 'success': false });
+                        } else {
+                            ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+                                if (err) throw err;
+
+                                if (!connection) {
+                                    res.status(401).json({ success: false, message: 'Access denied.' });
+
+                                } else if (connection) {
+
+                                    User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                                        if (err) throw err;
+
+                                        if (!user) {
+                                            res.status(401).json({ success: false, message: 'User not found.' });
+                                        } else if (user) {
+                                            var Tw = new Twit({
+                                                consumer_key: configTwitter.consumer_key,
+                                                consumer_secret: configTwitter.consumer_secret,
+                                                access_token: user.twitter.accessToken,
+                                                access_token_secret: user.twitter.AccessTokenSecret,
+                                                timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+                                            })
+                                            console.log("Uploadao fileovi i nasao usera")
+                                            var b64content = fs.readFileSync(new_path, { encoding: 'base64' })
+
+                                            // first we must post the media to Twitter
+                                            Tw.post('media/upload', { media_data: b64content }, function (err, data, response) {
+                                                // now we can assign alt text to the media, for use by screen readers and
+                                                // other text-based presentations and interpreters
+                                                var mediaIdStr = data.media_id_string
+                                                // var altText = "Small flowers in a planter on a sunny balcony, blossoming."
+                                                //  var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
+                                                var meta_params = { media_id: mediaIdStr }
+                                                Tw.post('media/metadata/create', meta_params, function (err, data, response) {
+                                                    if (!err) {
+                                                        // now we can reference the media and post a tweet (media will attach to the tweet)
+                                                        var params = { status: fields.status, media_ids: [mediaIdStr] }
+
+                                                        Tw.post('statuses/update', params, function (err, data, response) {
+                                                            res.json({
+                                                                success: true,
+                                                                message: "meeage"
+                                                            });
+                                                        })
+                                                    }
+                                                })
+                                            })
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    });
 }
