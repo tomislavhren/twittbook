@@ -1,5 +1,7 @@
 var User = require('../app/models/user');
 var ConnectionStorage = require('../app/models/connection');
+var Twit = require('twit');
+var configTwitter = require('../config/twitter.js');
 
 module.exports = function (apiRoutes, jwt, formidable) {
 
@@ -139,9 +141,6 @@ module.exports = function (apiRoutes, jwt, formidable) {
         }
     });
 
-    apiRoutes.get('/', function (req, res) {
-        res.json({ message: 'Welcome to the coolest API on earth!' });
-    });
 
     apiRoutes.post('/add-FB-account', function (req, res) {
 
@@ -325,7 +324,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
                 res.status(401).json({ success: false, message: 'Access denied.' });
 
             } else if (connection) {
-                User.findOne({ 'local.email': req.body.email }, function (err, user) {
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
 
                     if (err) throw err;
 
@@ -335,7 +334,6 @@ module.exports = function (apiRoutes, jwt, formidable) {
                         res.status(401).json({ success: false, message: 'No twitter data.' });
                     } else if (user) {
                         console.log(JSON.parse(req.body.twitter_data));
-
                         user.twitter = JSON.parse(req.body.twitter_data)
                         user.twitter.lastTokenUpdate = new Date();
 
@@ -349,11 +347,52 @@ module.exports = function (apiRoutes, jwt, formidable) {
                                 user: user
                             });
                         });
+
                     }
                 });
             }
 
         });
+    });
+
+    apiRoutes.post('/send-twitts', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (user) {
+                        var Tw = new Twit({
+                            consumer_key: configTwitter.consumer_key,
+                            consumer_secret: configTwitter.consumer_secret,
+                            access_token: user.twitter.accessToken,
+                            access_token_secret: user.twitter.AccessTokenSecret,
+                            timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+                        })
+
+                        Tw.post('statuses/update', { status: req.body.status }, function (err, data, response) {
+                            console.log(data)
+                            res.json({
+                                success: true,
+                                data: data
+                            });
+                        });
+
+                    }
+                });
+            }
+        });
 
     });
+
 }

@@ -16,14 +16,13 @@ var userSchema = mongoose.Schema({
         name: String,
         picture: Object,
         userID: String,
-        lastTokenUpdate:Date
+        lastTokenUpdate: Date
     },
-    /*    twitter          : {
-            id           : String,
-            token        : String,
-            displayName  : String,
-            username     : String
-        }*/
+    twitter: {
+        accessToken: String,
+        AccessTokenSecret: String,
+        lastTokenUpdate: String
+    }
 
 });
 
