@@ -4,6 +4,8 @@ var Twit = require('twit');
 var configTwitter = require('../config/twitter.js');
 var path = require('path');
 var fs = require('fs');
+var OAuth = require('oauth');
+
 
 module.exports = function (apiRoutes, jwt, formidable) {
 
@@ -469,5 +471,32 @@ module.exports = function (apiRoutes, jwt, formidable) {
                 });
             });
         });
+    });
+
+    apiRoutes.get('/login-twitter', function (req, res) {
+
+        var oauth = new OAuth.OAuth(
+            'https://api.twitter.com/oauth/request_token',
+            'https://api.twitter.com/oauth/access_token',
+            configTwitter.consumer_key,
+            configTwitter.consumer_secret,
+            '1.0A',
+            null,
+            'HMAC-SHA1'
+        );
+        oauth.getOAuthRequestToken(function (error, oauth_token, oauth_token_secret, results) {
+            if (error) new Error(error.data)
+            else {
+                // req.session.oauth.token = oauth_token
+                //req.session.oauth.token_secret = oauth_token_secret
+                res.json({
+                    success: true,
+                    oauth_token: oauth_token
+                });
+                //res.redirect('https://twitter.com/oauth/authenticate?oauth_token=' + oauth_token)
+
+            }
+        });
+
     });
 }
