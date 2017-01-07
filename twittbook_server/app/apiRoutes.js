@@ -491,12 +491,105 @@ module.exports = function (apiRoutes, jwt, formidable) {
                 //req.session.oauth.token_secret = oauth_token_secret
                 res.json({
                     success: true,
-                    oauth_token: oauth_token
+                    oauth_token: oauth_token,
+                    oauth_token_secret: oauth_token_secret
                 });
                 //res.redirect('https://twitter.com/oauth/authenticate?oauth_token=' + oauth_token)
 
             }
         });
-
     });
+
+
+    apiRoutes.get('/twitter-verify', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (user) {
+
+                        var oauth = new OAuth.OAuth(
+                            'https://api.twitter.com/oauth/request_token',
+                            'https://api.twitter.com/oauth/access_token',
+                            configTwitter.consumer_key,
+                            configTwitter.consumer_secret,
+                            '1.0A',
+                            null,
+                            'HMAC-SHA1'
+                        );
+                        oauth.getOAuthAccessToken(req.headers.oauth_token, req.headers.oauth_token_secret, req.headers.oauth_verifier,
+                            function (error, oauth_access_token, oauth_access_token_secret, results) {
+                                if (error) {
+                                    console.log(error);
+                                    res.send("yeah something broke.");
+                                } else {
+
+                                    console.log(results);
+                                    console.log(oauth_access_token);
+                                    console.log(oauth_access_token_secret);
+                                    user.twitter.accessToken = oauth_access_token;
+                                    user.twitter.AccessTokenSecret = oauth_access_token_secret;
+                                    user.twitter.lastTokenUpdate = new Date();
+                                    user.save(function (err) {
+                                        if (err)
+                                            throw err;
+
+                                        res.json({
+                                            success: true,
+                                            message: 'Added twitter account',
+                                            user: user
+                                        });
+                                    });
+                                }
+                            }
+                        );
+                    }
+                });
+            }
+        });
+    });
+
+    apiRoutes.get('/getUserData', function (req, res) {
+        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (!req.body.twitter_data) {
+                        res.status(401).json({ success: false, message: 'No twitter data.' });
+                    } else if (user) {
+
+                        res.json({
+                            success: true,
+                            message: 'User data',
+                            user: user
+                        });
+                    }
+                });
+            }
+
+        });
+    });
+
+
 }
