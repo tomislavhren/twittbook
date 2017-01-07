@@ -117,11 +117,11 @@ module.exports = function (apiRoutes, jwt, formidable) {
     apiRoutes.use(function (req, res, next) {
 
         // check header or url parameters or post parameters for token
-        var token = req.body.token || req.query.token || req.headers['x-access-token'];
+        var token = req.headers['x-access-token'];
 
         // decode token
         if (token) {
-
+                console.log(token)
             // verifies secret and checks exp
             jwt.verify(token, 'slatkaTajna12', function (err, decoded) {
                 if (err) {
@@ -178,7 +178,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.post('/add-FB-account2', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -249,7 +249,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.post('/update-password2', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -320,7 +320,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.post('/add-twitter-account2', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -360,7 +360,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.post('/send-twitts', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -414,7 +414,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
                             res.status(500);
                             res.json({ 'success': false });
                         } else {
-                            ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+                            ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
                                 if (err) throw err;
 
@@ -502,7 +502,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
 
     apiRoutes.get('/twitter-verify', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -561,7 +561,8 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.get('/getUserData', function (req, res) {
-        ConnectionStorage.findOne({ 'token': req.body.token }, function (err, connection) {
+        console.log( req.headers['x-access-token']);
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
 
@@ -575,9 +576,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
                     if (!user) {
                         res.status(401).json({ success: false, message: 'User not found.' });
-                    } else if (!req.body.twitter_data) {
-                        res.status(401).json({ success: false, message: 'No twitter data.' });
-                    } else if (user) {
+                    }  else if (user) {
 
                         res.json({
                             success: true,
