@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { Card } from 'material-ui/Card';
 import '../styles/PostCard.css';
+import ShowMoreDialog from './ShowMoreDialog';
 
 class PostCard extends Component {
     constructor(props) {
         super(props);
 
         this.post = this.props.post;
+        this.state = {
+            scrollable: false
+        };
     }
 
     componentDidMount() {
@@ -15,6 +19,7 @@ class PostCard extends Component {
         if (postTextScrollHeight > postTextContainerHeight) {
             // console.log(postTextContainerHeight);
             // console.log(postTextScrollHeight);
+            this.setState({ scrollable: true });
         }
     }
 
@@ -37,6 +42,7 @@ class PostCard extends Component {
                     </div>
                     <div className="post__provider-stamp">
                         {this.post.provider} &bull; {this.formatTime(this.post.created_time)}
+                        {this.state.scrollable ? <ShowMoreDialog post={this.post} /> : null}
                     </div>
                 </div>
             </Card>

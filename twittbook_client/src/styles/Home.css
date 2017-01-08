@@ -1,6 +1,6 @@
 .home-posts__container {
     margin: auto;
-    width: 52vw;
+    width: 40vw;
 }
 
 .home-posts__list {
@@ -14,14 +14,14 @@
 
 .home-posts__list .home-posts__post {
     list-style: none;
-    flex-basis: 32%;
+    flex-basis: 31%;
 }
 
 .home-posts__new-post {
     height: 168px;
-    width: 100vw;
+    width: 100%;
     background: rgb(33, 150, 243);
-    margin-bottom: 120px;
+    margin-bottom: 102px;
     display: flex;
     justify-content: center;
 }

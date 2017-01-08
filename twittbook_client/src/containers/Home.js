@@ -6,6 +6,7 @@ import NewPost from '../components/NewPost';
 import { fetchPosts, postAPost, postAPostWithImage } from '../actions/posts';
 import { obtainTwitterToken } from '../actions/auth';
 import Divider from 'material-ui/Divider';
+import Badge from 'material-ui/Badge';
 
 // responsible for fetching posts
 class Home extends Component {
@@ -19,7 +20,7 @@ class Home extends Component {
         Object.keys(this.props.posts).forEach((date) => {
             const postList_li = this.props.posts[date].map(post => {
                 return (
-                    <li key={post.id} className="home-posts__post post--space-around">
+                    <li key={post.list_key} className="home-posts__post post--space-around">
                         <PostCard post={post} />
                     </li>
                 );
@@ -32,7 +33,14 @@ class Home extends Component {
 
             const postSection = (
                 <div>
-                    <h3 className="home-posts__post-date">{date}</h3>
+                    <h3 className="home-posts__post-date">
+                        {date}
+                        <Badge
+                            badgeContent={this.props.posts[date].length || 0}
+                            primary={true}
+                            badgeStyle={{ top: 6, right: 8, backgroundColor: 'rgba(33, 150, 243, .54)' }}
+                            />
+                    </h3>
                     {postList_ul}
                 </div>
             );

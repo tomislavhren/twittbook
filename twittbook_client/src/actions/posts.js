@@ -11,66 +11,62 @@ const FB_ROOT_URL = 'https://graph.facebook.com/v2.8';
 
 export function fetchPosts() {
     return (dispatch) => {
-        const fbAccessToken = localStorage.getItem('fbAccessToken');
-        axios.get(`${FB_ROOT_URL}/me/posts?access_token=${fbAccessToken}`)
-            .then(({data: { data}}) => {
+
+        axios.all([fetchFacebookPosts(), fetchTweets()])
+            .then(axios.spread((fb, tw) => {
 
                 let postsByDate = {};
-                data.forEach((post) => {
+                fb.data.data.forEach((post) => {
                     if (!post.hasOwnProperty('story')) {
                         /** 
                          * Key => Date
                          * Value => Array of posts
                          */
+                        const fbPost = {
+                            created_time: post.created_time,
+                            id: post.id,
+                            message: post.message,
+                            provider: 'facebook',
+                            list_key: `fb_${post.id}`
+                        };
                         const date = new Date(post.created_time).toLocaleDateString();
-                        Object.assign(post, { provider: 'facebook' });
-                        if (!postsByDate[date]) {
-                            Object.assign(postsByDate, { [date]: [post] });
-                            postsByDate[date].push(post);
-                        } else {
-                            postsByDate[date].push(post);
-                        }
+                        if (!postsByDate[date]) Object.assign(postsByDate, { [date]: [] });
+                        postsByDate[date].push(fbPost);
                     }
+                });
+
+                tw.data.data.forEach((tweet) => {
+                    /** 
+                     * Key => Date
+                     * Value => Array of posts
+                     */
+                    const twPost = {
+                        created_time: tweet.created_at,
+                        id: tweet.id_str,
+                        message: tweet.text,
+                        provider: 'twitter',
+                        list_key: `twt_${tweet.id_str}`
+                    };
+                    const date = new Date(tweet.created_at).toLocaleDateString();
+                    if (!postsByDate[date]) Object.assign(postsByDate, { [date]: [] });
+                    postsByDate[date].push(twPost);
                 });
 
                 dispatch({
                     type: FETCH_POSTS,
                     posts: postsByDate
                 });
-            });
+            }));
     }
 }
-// https://api.twitter.com/1.1/search/tweets.json
-export function fetchTweets() {
-    return (dispatch) => {
-        const fbAccessToken = localStorage.getItem('fbAccessToken');
-        axios.get(`https://api.twitter.com/1.1/search/tweets.json?access_token=${fbAccessToken}`)
-            .then(({data: { data}}) => {
 
-                let postsByDate = {};
-                data.forEach((post) => {
-                    if (!post.hasOwnProperty('story')) {
-                        /** 
-                         * Key => Date
-                         * Value => Array of posts
-                         */
-                        const date = new Date(post.created_time).toLocaleDateString();
-                        Object.assign(post, { provider: 'facebook' });
-                        if (!postsByDate[date]) {
-                            Object.assign(postsByDate, { [date]: [post] });
-                            postsByDate[date].push(post);
-                        } else {
-                            postsByDate[date].push(post);
-                        }
-                    }
-                });
+function fetchFacebookPosts() {
+    const fbAccessToken = localStorage.getItem('fbAccessToken');
+    return axios.get(`${FB_ROOT_URL}/me/posts?access_token=${fbAccessToken}`);
+}
 
-                dispatch({
-                    type: FETCH_POSTS,
-                    posts: postsByDate
-                });
-            });
-    }
+function fetchTweets() {
+    return axios.get('/fetchTweets');
 }
 
 export function postAPost(status) {
@@ -78,9 +74,6 @@ export function postAPost(status) {
         axios.all([postToFacebook(status), tweetToTwitter(status)])
             .then(axios.spread((fbRes, twRes) => {
                 fetchPosts();
-
-                console.log(fbRes);
-                console.log(twRes);
                 dispatch({
                     type: POSTED_POST
                 });

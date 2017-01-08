@@ -16,12 +16,12 @@
 
 .new-post__input, 
 .new-post__actions {
-       padding: 0 16px 16px 0;
+       padding: 0 16px 8px 0;
        width: 87%;
 }
 
 .new-post__card {
-    width: 54vw;
+    width: 40vw;
 }
 
 #upload-image {

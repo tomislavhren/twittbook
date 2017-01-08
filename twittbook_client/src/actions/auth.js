@@ -23,10 +23,12 @@ export function singInUser({email, password}) {
         axios.post(`/login`, queryStringify({ email, password }))
             .then(res => {
                 // update state with isAuth
-                dispatch({ type: USER_DATA, user: res.data.user });
                 dispatch({ type: AUTH_USER, payload: res.data });
+                dispatch({ type: USER_DATA, user: res.data.user });
                 // save token
                 localStorage.setItem('token', res.data.token);
+                const user_profile_img = res.data.user.facebook ? res.data.user.facebook.picture.data.url : '';
+                localStorage.setItem('user_profile_img', user_profile_img);
                 // redirect to home
                 browserHistory.push('/home');
             })

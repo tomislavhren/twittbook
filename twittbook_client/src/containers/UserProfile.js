@@ -6,6 +6,7 @@ import '../styles/UserProfile.css';
 import FacebookLogin from 'react-facebook-login';
 import fbAuth from '../config/facebookAuth';
 import { addFacebookAccount, getUserData, obtainTwitterToken } from '../actions/auth';
+import { Link } from 'react-router';
 
 const TWITTER_AUTH_URL = 'https://api.twitter.com/oauth/authorize?oauth_token=';
 
@@ -69,8 +70,16 @@ class UserProfile extends Component {
                         </div>
                     </div>
                     <CardActions className="user-profile__actions">
-                        <FlatButton label="Facebook" />
-                        <FlatButton label="Twitter" />
+                        <FlatButton
+                            style={{ color: 'white' }}
+                            label="Facebook"
+                            icon={<span className="fa fa-facebook"></span>}
+                            containerElement={<Link to="https://www.facebook.com" target="_blank" />} />
+                        <FlatButton
+                            style={{ color: 'white' }}
+                            label="Twitter"
+                            icon={<span className="fa fa-twitter"></span>}
+                            containerElement={<Link to="https://www.twitter.com" target="_blank" />} />/>
                     </CardActions>
                 </Card>
                 <div id="user-profile"><img src={fbPicture} role="presentation" /></div>

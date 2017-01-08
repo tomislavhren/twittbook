@@ -8,6 +8,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import * as actions from '../actions/auth';
 import { Link } from 'react-router';
 import '../styles/Logged.css';
+import Avatar from 'material-ui/Avatar';
 
 class Logged extends Component {
     render() {
@@ -39,6 +40,7 @@ class Logged extends Component {
                 <FlatButton
                     className="hide-on-small-screen"
                     label="Profile"
+                    icon={<Avatar size={24} src={localStorage.getItem('user_profile_img')} />}
                     containerElement={<Link to="/user" />} />
                 <FlatButton
                     className="hide-on-small-screen"
