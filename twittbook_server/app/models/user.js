@@ -21,7 +21,9 @@ var userSchema = mongoose.Schema({
     twitter: {
         accessToken: String,
         accessTokenSecret: String,
-        lastTokenUpdate: String
+        lastTokenUpdate: String,
+        screenName: String,
+        userID:String
     }
 
 });

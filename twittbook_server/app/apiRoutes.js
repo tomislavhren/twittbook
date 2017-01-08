@@ -540,6 +540,9 @@ module.exports = function (apiRoutes, jwt, formidable) {
                                     user.twitter.accessToken = oauth_access_token;
                                     user.twitter.accessTokenSecret = oauth_access_token_secret;
                                     user.twitter.lastTokenUpdate = new Date();
+                                    user.twitter.screenName = results.screen_name;
+                                    user.twitter.userID = results.user_id;
+
                                     user.save(function (err) {
                                         if (err)
                                             throw err;
@@ -574,13 +577,52 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
                     if (!user) {
                         res.status(401).json({ success: false, message: 'User not found.' });
-                    }  else if (user) {
+                    } else if (user) {
 
                         res.json({
                             success: true,
                             message: 'User data',
                             user: user
                         });
+                    }
+                });
+            }
+
+        });
+    });
+
+    apiRoutes.get('/fetchTweets', function (req, res) {
+        ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
+
+            if (err) throw err;
+
+            if (!connection) {
+                res.status(401).json({ success: false, message: 'Access denied.' });
+
+            } else if (connection) {
+                User.findOne({ 'local.email': connection.data.email }, function (err, user) {
+
+                    if (err) throw err;
+
+                    if (!user) {
+                        res.status(401).json({ success: false, message: 'User not found.' });
+                    } else if (user) {
+                        console.log(user);
+                        var Tw = new Twit({
+                            consumer_key: configTwitter.consumer_key,
+                            consumer_secret: configTwitter.consumer_secret,
+                            access_token: user.twitter.accessToken,
+                            access_token_secret: user.twitter.accessTokenSecret,
+                            timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+                        })
+
+                        Tw.get('statuses/user_timeline', { screen_name: user.twitter.screenName }, function (err, data, response) {
+                            res.json({
+                                success: true,
+                                message: 'User twits',
+                                data: data
+                            });
+                        })
                     }
                 });
             }
