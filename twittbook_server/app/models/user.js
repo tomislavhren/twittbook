@@ -20,7 +20,7 @@ var userSchema = mongoose.Schema({
     },
     twitter: {
         accessToken: String,
-        AccessTokenSecret: String,
+        accessTokenSecret: String,
         lastTokenUpdate: String
     }
 

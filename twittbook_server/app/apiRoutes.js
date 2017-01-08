@@ -121,7 +121,6 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
         // decode token
         if (token) {
-                console.log(token)
             // verifies secret and checks exp
             jwt.verify(token, 'slatkaTajna12', function (err, decoded) {
                 if (err) {
@@ -380,7 +379,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
                             consumer_key: configTwitter.consumer_key,
                             consumer_secret: configTwitter.consumer_secret,
                             access_token: user.twitter.accessToken,
-                            access_token_secret: user.twitter.AccessTokenSecret,
+                            access_token_secret: user.twitter.accessTokenSecret,
                             timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
                         })
 
@@ -434,7 +433,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
                                                 consumer_key: configTwitter.consumer_key,
                                                 consumer_secret: configTwitter.consumer_secret,
                                                 access_token: user.twitter.accessToken,
-                                                access_token_secret: user.twitter.AccessTokenSecret,
+                                                access_token_secret: user.twitter.accessTokenSecret,
                                                 timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
                                             })
                                             console.log("Uploadao fileovi i nasao usera")
@@ -539,7 +538,7 @@ module.exports = function (apiRoutes, jwt, formidable) {
                                     console.log(oauth_access_token);
                                     console.log(oauth_access_token_secret);
                                     user.twitter.accessToken = oauth_access_token;
-                                    user.twitter.AccessTokenSecret = oauth_access_token_secret;
+                                    user.twitter.accessTokenSecret = oauth_access_token_secret;
                                     user.twitter.lastTokenUpdate = new Date();
                                     user.save(function (err) {
                                         if (err)
@@ -561,7 +560,6 @@ module.exports = function (apiRoutes, jwt, formidable) {
     });
 
     apiRoutes.get('/getUserData', function (req, res) {
-        console.log( req.headers['x-access-token']);
         ConnectionStorage.findOne({ 'data.token': req.body.token || req.headers['x-access-token'] }, function (err, connection) {
 
             if (err) throw err;
