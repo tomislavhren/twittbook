@@ -6,17 +6,23 @@ import {
     AUTH_ERROR,
     AUTH_IN_PROGRESS,
     AUTH_DONE,
-    UPDATE_FACEBOOK_ACCOUNT
+    UPDATE_FACEBOOK_ACCOUNT,
+    USER_DATA,
+    TWITTER_AUTH_TOKEN
 } from '../constants/action_types';
+import queryStringify from '../utils/queryStringify';
 
-const ROOT_URL = 'http://localhost:8080/api';
+axios.defaults.baseURL = 'http://localhost:8080/api';
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers['x-access-token'] = localStorage.getItem('token');
 
-export function singInUser(credentials) {
+export function singInUser({email, password}) {
     return (dispatch) => {
         dispatch(authInProgress(true));
-        axios.post(`${ROOT_URL}/login`, credentials)
+        axios.post(`/login`, queryStringify({ email, password }))
             .then(res => {
                 // update state with isAuth
+                dispatch({ type: USER_DATA, user: res.data.user });
                 dispatch({ type: AUTH_USER, payload: res.data });
                 // save token
                 localStorage.setItem('token', res.data.token);
@@ -52,7 +58,7 @@ export function addFacebookAccount(data) {
     return (dispatch) => {
         const token = localStorage.getItem('token');
         const { email, facebook_data } = data;
-        axios.post(`${ROOT_URL}/add-FB-account`, { email, facebook_data, token })
+        axios.post(`/add-FB-account2`, queryStringify({ email: email, facebook_data: JSON.stringify(facebook_data) }))
             .then(res => {
                 // update state with isAuth
                 dispatch({ type: UPDATE_FACEBOOK_ACCOUNT, user: res.data.user });
@@ -62,6 +68,36 @@ export function addFacebookAccount(data) {
                 console.log(err);
             });
     };
+}
+
+export function getUserData() {
+    return (dispatch) => {
+        const token = localStorage.getItem('token');
+        axios.get(`/getUserData`)
+            .then(res => {
+                // update state with isAuth
+                dispatch({ type: USER_DATA, user: res.data.user });
+            })
+            .catch((err) => {
+                // error
+                console.log(err);
+            });
+    };
+}
+
+export function obtainTwitterToken() {
+    return (dispatch) => {
+        axios.get(`/login-twitter`)
+            .then(res => {
+                dispatch({
+                    type: TWITTER_AUTH_TOKEN,
+                    tw_auth_token: res.data
+                });
+            })
+            .catch(err => {
+                console.log(err)
+            });
+    }
 }
 
 function authInProgress(isAuthInProgress) {

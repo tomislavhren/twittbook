@@ -13,5 +13,6 @@ export default (
         <IndexRoute component={LoginPage} />
         <Route path="home" component={RequireAuth(Home)} />
         <Route path="user" component={RequireAuth(UserProfile)} />
+        <Route path="successful-twitter-auth" component={RequireAuth(UserProfile)} />
     </Route>
 );

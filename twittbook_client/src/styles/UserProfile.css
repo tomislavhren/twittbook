@@ -57,6 +57,12 @@
 .user-profile__content {
 }
 
+.btn-twitter {
+    color: #fff;
+    background-color: #55acee;
+    border-color: rgba(0,0,0,0.2);
+}
+
 .btn-block + .btn-block {
     margin-top: 5px;
 }

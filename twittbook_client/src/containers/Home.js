@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import '../styles/Home.css';
 import NewPost from '../components/NewPost';
 import { fetchPosts, postAPost } from '../actions/posts';
+import { obtainTwitterToken } from '../actions/auth';
 import Divider from 'material-ui/Divider';
 
 // responsible for fetching posts
@@ -40,13 +41,6 @@ class Home extends Component {
         });
 
         return result;
-        // return this.props.posts.map(post => {
-        //     return (
-        //         <li key={post.id} className="home-posts__post">
-        //             <PostCard post={post} />
-        //         </li>
-        //     );
-        // });
     }
 
     handleSubmit(msg) {
@@ -54,7 +48,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log("RENDERING");
         return (
             <div className="home__container">
                 <div className="home-posts__new-post">
@@ -74,4 +67,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 }
 
-export default connect(mapStateToProps, { fetchPosts, postAPost })(Home);
+export default connect(mapStateToProps, { fetchPosts, postAPost, obtainTwitterToken })(Home);

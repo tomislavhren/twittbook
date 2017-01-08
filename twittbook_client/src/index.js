@@ -18,7 +18,9 @@ const store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENS
 const token = localStorage.getItem('token');
 
 if (token) {
-  store.dispatch({ type: AUTH_USER });
+  store.dispatch({
+    type: AUTH_USER
+  });
 } else {
   browserHistory.push('/');
 }

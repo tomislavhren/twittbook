@@ -4,31 +4,16 @@ import {
     AUTH_ERROR,
     AUTH_IN_PROGRESS,
     AUTH_DONE,
-    UPDATE_FACEBOOK_ACCOUNT
+    UPDATE_FACEBOOK_ACCOUNT,
+    USER_DATA,
+    TWITTER_AUTH_TOKEN
 } from '../constants/action_types';
 
 const AuthInitialState = {}
 const Auth = (state = AuthInitialState, action) => {
     switch (action.type) {
         case AUTH_USER:
-            const {
-                user = null,
-                token = "",
-                isAuthenticated = true
-            } = action.payload ? action.payload : {};
-
-            if (token && user)
-                return {
-                    ...state,
-                    isAuthenticated,
-                    user,
-                    token
-                };
-            else
-                return {
-                    ...state,
-                    isAuthenticated
-                };
+            return { ...state, isAuthenticated: true };
         case UNAUTH_USER:
             return { ...state, isAuthenticated: false };
         case AUTH_ERROR:
@@ -38,7 +23,11 @@ const Auth = (state = AuthInitialState, action) => {
         case AUTH_DONE:
             return { ...state, authInProgress: false };
         case UPDATE_FACEBOOK_ACCOUNT:
-            return { ...state, user: action.user }
+            return { ...state, user: action.user };
+        case USER_DATA:
+            return { ...state, user: action.user };
+        case TWITTER_AUTH_TOKEN:
+            return { ...state, tw_auth_token: action.tw_auth_token }
         default:
             return state;
     }
