@@ -8,7 +8,8 @@ import {
     AUTH_DONE,
     UPDATE_FACEBOOK_ACCOUNT,
     USER_DATA,
-    TWITTER_AUTH_TOKEN
+    TWITTER_AUTH_TOKEN,
+    TWITTER_AUTH_SUCCESS
 } from '../constants/action_types';
 import queryStringify from '../utils/queryStringify';
 
@@ -58,7 +59,7 @@ export function addFacebookAccount(data) {
     return (dispatch) => {
         const token = localStorage.getItem('token');
         const { email, facebook_data } = data;
-        axios.post(`/add-FB-account2`, queryStringify({ email: email, facebook_data: JSON.stringify(facebook_data) }))
+        axios.post(`/add-FB-account2`, queryStringify({ email: email, facebook_data: facebook_data }))
             .then(res => {
                 // update state with isAuth
                 dispatch({ type: UPDATE_FACEBOOK_ACCOUNT, user: res.data.user });
@@ -89,13 +90,33 @@ export function obtainTwitterToken() {
     return (dispatch) => {
         axios.get(`/login-twitter`)
             .then(res => {
+                const tw_auth_token = res.data
                 dispatch({
                     type: TWITTER_AUTH_TOKEN,
-                    tw_auth_token: res.data
+                    tw_auth_token
                 });
+                window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${tw_auth_token.oauth_token}`, '_blank', 'width=700,height=850');
             })
             .catch(err => {
                 console.log(err)
+            });
+    }
+}
+
+export function verifyTwitter({oauth_token, oauth_token_secret, oauth_verifier}) {
+    return (dispatch) => {
+        const config = {
+            headers: {
+                oauth_token,
+                oauth_token_secret,
+                oauth_verifier
+            }
+        };
+
+        axios.get('/twitter-verify', config)
+            .then((res) => {
+                console.log(res.data);
+                dispatch({ type: TWITTER_AUTH_SUCCESS, user: res.data.user })
             });
     }
 }

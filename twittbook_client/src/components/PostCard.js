@@ -13,8 +13,8 @@ class PostCard extends Component {
         const postTextContainerHeight = this.refs.postText.getBoundingClientRect().height;
         const postTextScrollHeight = this.refs.postText.scrollHeight;
         if (postTextScrollHeight > postTextContainerHeight) {
-            console.log(postTextContainerHeight);
-            console.log(postTextScrollHeight);
+            // console.log(postTextContainerHeight);
+            // console.log(postTextScrollHeight);
         }
     }
 

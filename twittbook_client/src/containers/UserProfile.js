@@ -15,12 +15,6 @@ class UserProfile extends Component {
         this.props.getUserData();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.tw_auth_token) {
-            window.open(`https://api.twitter.com/oauth/authorize?oauth_token=${nextProps.tw_auth_token.oauth_token}`, '_blank', 'width=700,height=850');
-        }
-    }
-
     responseFacebook(facebook_data) {
         localStorage.setItem('fbAccessToken', facebook_data.accessToken);
         this.props.addFacebookAccount({
@@ -57,7 +51,7 @@ class UserProfile extends Component {
                                     autoLoad={true}
                                     version="2.8"
                                     fields="name,email,picture.type(large),about"
-                                    scope="public_profile,user_about_me,email,user_birthday,user_posts,publish_actions"
+                                    scope="public_profile,user_about_me,email,user_birthday,user_posts,user_photos,publish_actions"
                                     callback={this.responseFacebook.bind(this)}
                                     cssClass="btn btn-block btn-social btn-facebook"
                                     icon="fa-facebook"

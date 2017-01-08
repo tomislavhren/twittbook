@@ -9,7 +9,8 @@ class NewPost extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            input: ''
+            status: '',
+            image: ''
         };
     }
     render() {
@@ -24,7 +25,7 @@ class NewPost extends Component {
                 <div className="new-post__form-container">
                     <div className="new-post__input">
                         <TextField
-                            onChange={evt => this.setState({ input: evt.target.value })}
+                            onChange={evt => this.setState({ status: evt.target.value })}
                             floatingLabelText="What's on your mind?"
                             multiLine={true}
                             rows={2}
@@ -33,11 +34,17 @@ class NewPost extends Component {
                             />
                     </div>
                     <div className="new-post__actions">
+                        <FlatButton label="Upload image" labelPosition="before">
+                            <input
+                                id="upload-image"
+                                type="file"
+                                onChange={evt => this.setState({ image: evt.target.files[0] })} />
+                        </FlatButton>
                         <FlatButton
                             label="Post"
                             labelPosition="before"
                             secondary={true}
-                            onClick={() => this.props.handleSubmit(this.state.input)}
+                            onClick={() => this.props.handleSubmit(this.state)}
                             icon={<SendIcon />}
                             />
                     </div>

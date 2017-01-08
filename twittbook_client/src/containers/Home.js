@@ -3,7 +3,7 @@ import PostCard from '../components/PostCard';
 import { connect } from 'react-redux';
 import '../styles/Home.css';
 import NewPost from '../components/NewPost';
-import { fetchPosts, postAPost } from '../actions/posts';
+import { fetchPosts, postAPost, postAPostWithImage } from '../actions/posts';
 import { obtainTwitterToken } from '../actions/auth';
 import Divider from 'material-ui/Divider';
 
@@ -43,8 +43,9 @@ class Home extends Component {
         return result;
     }
 
-    handleSubmit(msg) {
-        this.props.postAPost(msg);
+    handleSubmit({status, image}) {
+        if (!image) this.props.postAPost(status);
+        else this.props.postAPostWithImage(image, status);
     }
 
     render() {
@@ -67,4 +68,4 @@ const mapStateToProps = (state, ownProps) => {
     };
 }
 
-export default connect(mapStateToProps, { fetchPosts, postAPost, obtainTwitterToken })(Home);
+export default connect(mapStateToProps, { fetchPosts, postAPost, obtainTwitterToken, postAPostWithImage })(Home);

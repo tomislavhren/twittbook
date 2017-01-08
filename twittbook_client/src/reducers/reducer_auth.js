@@ -6,7 +6,8 @@ import {
     AUTH_DONE,
     UPDATE_FACEBOOK_ACCOUNT,
     USER_DATA,
-    TWITTER_AUTH_TOKEN
+    TWITTER_AUTH_TOKEN,
+    TWITTER_AUTH_SUCCESS
 } from '../constants/action_types';
 
 const AuthInitialState = {}
@@ -27,7 +28,9 @@ const Auth = (state = AuthInitialState, action) => {
         case USER_DATA:
             return { ...state, user: action.user };
         case TWITTER_AUTH_TOKEN:
-            return { ...state, tw_auth_token: action.tw_auth_token }
+            return { ...state, tw_auth_token: action.tw_auth_token };
+        case TWITTER_AUTH_SUCCESS:
+            return { ...state, user: action.user }
         default:
             return state;
     }

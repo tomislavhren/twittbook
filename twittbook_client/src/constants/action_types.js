@@ -10,3 +10,4 @@ export const POSTED_POST = 'posted_post';
 
 export const UPDATE_FACEBOOK_ACCOUNT = 'update_facebook_account';
 export const TWITTER_AUTH_TOKEN = 'twitter_auth_token';
+export const TWITTER_AUTH_SUCCESS = 'twitter_auth_success';

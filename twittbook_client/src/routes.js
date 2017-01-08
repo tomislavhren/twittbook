@@ -7,12 +7,13 @@ import LoginPage from './components/LoginPage';
 import Home from './containers/Home';
 import UserProfile from './containers/UserProfile';
 import RequireAuth from './utils/Require_auth';
+import SuccessfulTwitterAuth from './containers/SuccessfulTwitterAuth';
 
 export default (
     <Route path="/" component={App}>
         <IndexRoute component={LoginPage} />
         <Route path="home" component={RequireAuth(Home)} />
         <Route path="user" component={RequireAuth(UserProfile)} />
-        <Route path="successful-twitter-auth" component={RequireAuth(UserProfile)} />
+        <Route path="successful-twitter-auth" component={RequireAuth(SuccessfulTwitterAuth)} />
     </Route>
 );
