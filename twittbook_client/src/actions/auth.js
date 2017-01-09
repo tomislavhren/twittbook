@@ -22,13 +22,20 @@ export function singInUser({email, password}) {
         dispatch(authInProgress(true));
         axios.post(`/login`, queryStringify({ email, password }))
             .then(res => {
-                // update state with isAuth
-                dispatch({ type: AUTH_USER, payload: res.data });
-                dispatch({ type: USER_DATA, user: res.data.user });
-                // save token
+                const facebook = res.data.user.facebook || null;
+                let user_profile_img = '';
+                if (facebook) {
+                    //check if token expired
+                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                    user_profile_img = facebook.picture.data.url;
+                }
+                // save tokens
                 localStorage.setItem('token', res.data.token);
-                const user_profile_img = res.data.user.facebook ? res.data.user.facebook.picture.data.url : '';
                 localStorage.setItem('user_profile_img', user_profile_img);
+
+                // update state with isAuth
+                dispatch({ type: AUTH_USER });
+                dispatch({ type: USER_DATA, user: res.data.user });
                 // redirect to home
                 browserHistory.push('/home');
             })
@@ -78,6 +85,11 @@ export function getUserData() {
         const token = localStorage.getItem('token');
         axios.get(`/getUserData`)
             .then(res => {
+                const facebook = res.data.facebook || null;
+                if (facebook) {
+                    //check if token expired
+                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                }
                 // update state with isAuth
                 dispatch({ type: USER_DATA, user: res.data.user });
             })
@@ -136,3 +148,11 @@ function authError(error) {
     };
 }
 
+function checkIfFBTokenExpired(lastTokenUpdate, expiresIn) {
+    const expireDate = new Date(lastTokenUpdate);
+    expireDate.setSeconds(expireDate.getSeconds() + expiresIn);
+    const now = new Date();
+
+    if (now > expireDate) return true;
+    return false;
+}

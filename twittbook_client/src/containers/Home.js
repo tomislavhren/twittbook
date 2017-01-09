@@ -7,9 +7,14 @@ import { fetchPosts, postAPost, postAPostWithImage } from '../actions/posts';
 import { obtainTwitterToken } from '../actions/auth';
 import Divider from 'material-ui/Divider';
 import Badge from 'material-ui/Badge';
+import TokenExpiredDialog from '../components/TokenExpiredDialog';
 
 // responsible for fetching posts
 class Home extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     componentWillMount() {
         this.props.fetchPosts();
     }
@@ -38,7 +43,7 @@ class Home extends Component {
                         <Badge
                             badgeContent={this.props.posts[date].length || 0}
                             primary={true}
-                            badgeStyle={{ top: 6, right: 8, backgroundColor: 'rgba(33, 150, 243, .54)' }}
+                            badgeStyle={{ top: 16, right: 7, backgroundColor: 'rgba(0, 0, 0, .27)' }}
                             />
                     </h3>
                     {postList_ul}
@@ -65,6 +70,7 @@ class Home extends Component {
                 <div className="home-posts__container">
                     {this.renderPosts()}
                 </div>
+                <TokenExpiredDialog open={this.props.hasExpired} />
             </div>
         );
     }
@@ -72,7 +78,8 @@ class Home extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        posts: state.posts
+        posts: state.posts,
+        hasExpired: state.auth.user ? state.auth.user.facebook.hasExpired : true
     };
 }
 

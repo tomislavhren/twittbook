@@ -4,48 +4,15 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Header from '../containers/Header';
 import Footer from './Footer';
 import theme from '../config/theme';
+import { connect } from 'react-redux';
+import { getUserData } from '../actions/auth';
 
 class App extends Component {
   componentWillMount() {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: '1759502397705552',
-        xfbml: true,
-        version: 'v2.8'
-      });
-      window.FB.AppEvents.logPageView();
-    };
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    } (document, 'script', 'facebook-jssdk'));
-  }
-
-  componentWillUpdate() {
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        appId: '1759502397705552',
-        xfbml: true,
-        version: 'v2.8'
-      });
-      window.FB.AppEvents.logPageView();
-    };
-
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) { return; }
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    } (document, 'script', 'facebook-jssdk'));
+    this.props.getUserData();
   }
 
   render() {
-    console.info("%c App rendered", "color: green")
     return (
       <MuiThemeProvider muiTheme={theme}>
         <div>
@@ -58,4 +25,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, { getUserData })(App);

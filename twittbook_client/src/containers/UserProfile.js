@@ -46,7 +46,7 @@ class UserProfile extends Component {
                             <img src={fbPicture} role="presentation" />
                         </div>
                         <div className="user-profile__content">
-                            <div>
+                            <div className="user-profile__button">
                                 <FacebookLogin
                                     appId={fbAuth.clientId}
                                     autoLoad={true}
@@ -59,8 +59,7 @@ class UserProfile extends Component {
                                     textButton="Connect Facebook account"
                                     />
                             </div>
-                            <br />
-                            <div>
+                            <div className="user-profile__button">
                                 <button
                                     onClick={this.props.obtainTwitterToken}
                                     className="btn btn-block btn-social btn-twitter">
@@ -79,7 +78,7 @@ class UserProfile extends Component {
                             style={{ color: 'white' }}
                             label="Twitter"
                             icon={<span className="fa fa-twitter"></span>}
-                            containerElement={<Link to="https://www.twitter.com" target="_blank" />} />/>
+                            containerElement={<Link to="https://www.twitter.com" target="_blank" />} />
                     </CardActions>
                 </Card>
                 <div id="user-profile"><img src={fbPicture} role="presentation" /></div>

@@ -15,6 +15,12 @@ class NewPost extends Component {
             image: ''
         };
     }
+
+    handleSubmit() {
+        this.props.handleSubmit(this.state);
+        this.setState({ status: '', image: '' });
+    }
+
     render() {
         const style = {
             position: 'absolute',
@@ -48,7 +54,7 @@ class NewPost extends Component {
                             labelPosition="before"
                             secondary={true}
                             style={{ alignSelf: 'center' }}
-                            onClick={() => this.props.handleSubmit(this.state)}
+                            onClick={this.handleSubmit.bind(this)}
                             icon={<SendIcon />}
                             />
                     </div>

@@ -14,13 +14,17 @@
 }
 
 .user-profile__container {
-    width: 56vw;
+    width: 36vw;
     margin: auto;
     padding-top: 128px;
 }
 
 .user-profile__card {
     position: relative;
+}
+
+.user-profile__button {
+    margin-top: 8px;
 }
 
 .user-profile__actions {
@@ -52,9 +56,6 @@
     flex-flow: row wrap;
     justify-content: space-between;
     padding: 12px 32px 24px 32px !important;
-}
-
-.user-profile__content {
 }
 
 .btn-twitter {
@@ -108,4 +109,27 @@
     line-height: 34px;
     font-size: 1.6em;
     text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+    .user-profile__container {
+        width: 80vw;
+        margin: auto;
+        padding-top: 24px;
+    }
+
+    #user-profile img {
+        transform: scale(6);
+    }
+
+    .user-profile__body {
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+    }
+
+    .user-profile__body > * {
+        width: 100% !important;
+    }
 }

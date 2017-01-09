@@ -40,3 +40,27 @@
         width: 90vw;
     }
 }  
+
+@media only screen and (min-width: 501px) and (max-width: 1024px){
+    .new-post__card {
+        width: 75vw;
+    }
+} 
+
+@media only screen and (min-width: 1025px) and (max-width: 1366px){
+    .new-post__card {
+        width: 71vw;
+    }
+} 
+
+@media only screen and (min-width: 1367px) {
+     .new-post__card {
+        width: 55vw;
+    }
+} 
+
+@media only screen and (min-width: 1850px) {
+    .new-post__card {
+       width: 47vw;
+    }
+} 

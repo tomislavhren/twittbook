@@ -50,3 +50,38 @@
         margin: 16px;
     }
 }   
+
+@media only screen and (min-width: 501px) and (max-width: 1024px) {
+    .home-posts__container {
+        width: 75vw;
+    }
+
+    .home-posts__list {
+        flex-flow: column wrap;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .post--space-around {
+        margin: 16px;
+    }
+} 
+
+@media only screen and (min-width: 1025px) and (max-width: 1366px){
+    .home-posts__container {
+        width: 70vw;
+    }
+} 
+
+@media only screen and (min-width: 1367px) {
+    .home-posts__container {
+       width: 55vw;
+    }
+} 
+
+
+@media only screen and (min-width: 1850px) {
+    .home-posts__container {
+       width: 45vw;
+    }
+} 
