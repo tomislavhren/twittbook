@@ -606,6 +606,9 @@ module.exports = function (apiRoutes, jwt, formidable) {
 
                     if (!user) {
                         res.status(401).json({ success: false, message: 'User not found.' });
+                    }
+                    else if (!user.twitter.accessToken) {
+                        res.status(401).json({ success: false, message: "User doesn't have twitter account." });
                     } else if (user) {
                         console.log(user);
                         var Tw = new Twit({
