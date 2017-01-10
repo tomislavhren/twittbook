@@ -22,20 +22,24 @@ export function singInUser({email, password}) {
         dispatch(authInProgress(true));
         axios.post(`/login`, queryStringify({ email, password }))
             .then(res => {
-                const facebook = res.data.user.facebook || null;
+                let {user, token} = res.data;
                 let user_profile_img = '';
+                const facebook = user.facebook || null;
                 if (facebook) {
                     //check if token expired
-                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                    Object.assign(user.facebook, {
+                        hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
+                    });
                     user_profile_img = facebook.picture.data.url;
                 }
                 // save tokens
-                localStorage.setItem('token', res.data.token);
+                axios.defaults.headers['x-access-token'] = token;
+                localStorage.setItem('token', token);
                 localStorage.setItem('user_profile_img', user_profile_img);
 
                 // update state with isAuth
                 dispatch({ type: AUTH_USER });
-                dispatch({ type: USER_DATA, user: res.data.user });
+                dispatch({ type: USER_DATA, user });
                 // redirect to home
                 browserHistory.push('/home');
             })
@@ -59,20 +63,24 @@ export function registerUser({email, password}) {
     return (dispatch) => {
         axios.post(`/register`, queryStringify({ email, password }))
             .then(res => {
-                const facebook = res.data.user.facebook || null;
+                let {user, token} = res.data;
                 let user_profile_img = '';
+                const facebook = user.facebook || null;
                 if (facebook) {
                     //check if token expired
-                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                    Object.assign(user.facebook, {
+                        hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
+                    });
                     user_profile_img = facebook.picture.data.url;
                 }
                 // save tokens
-                localStorage.setItem('token', res.data.token);
+                localStorage.clear();
+                localStorage.setItem('token', token);
                 localStorage.setItem('user_profile_img', user_profile_img);
 
                 // update state with isAuth
                 dispatch({ type: AUTH_USER });
-                dispatch({ type: USER_DATA, user: res.data.user });
+                dispatch({ type: USER_DATA, user });
                 // redirect to home
                 browserHistory.push('/user');
             })
@@ -100,7 +108,6 @@ export function signOutUser() {
 
 export function addFacebookAccount(data) {
     return (dispatch) => {
-        const token = localStorage.getItem('token');
         const { email, facebook_data } = data;
         axios.post(`/add-FB-account2`, queryStringify({ email: email, facebook_data: facebook_data }))
             .then(res => {
@@ -119,13 +126,18 @@ export function getUserData() {
         const token = localStorage.getItem('token');
         axios.get(`/getUserData`)
             .then(res => {
-                const facebook = res.data.facebook || null;
+                let {user} = res.data;
+                let user_profile_img = '';
+                const facebook = user.facebook || null;
                 if (facebook) {
                     //check if token expired
-                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                    Object.assign(user.facebook, {
+                        hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
+                    });
+                    user_profile_img = facebook.picture.data.url;
                 }
                 // update state with isAuth
-                dispatch({ type: USER_DATA, user: res.data.user });
+                dispatch({ type: USER_DATA, user });
             })
             .catch((err) => {
                 // error

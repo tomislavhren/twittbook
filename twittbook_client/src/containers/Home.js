@@ -77,9 +77,10 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    const { user } = state.auth;
     return {
         posts: state.posts,
-        hasExpired: state.auth.user ? state.auth.user.facebook.hasExpired : true
+        hasExpired: user.hasOwnProperty('facebook') ? user.facebook.hasExpired : true
     };
 }
 
