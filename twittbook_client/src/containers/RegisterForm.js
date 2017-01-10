@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import '../styles/LoginPage.css';
+import '../styles/RegisterPage.css';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import { singInUser } from '../actions/auth';
+import { registerUser } from '../actions/auth';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Link } from 'react-router';
 
-class SignInForm extends Component {
+class RegisterForm extends Component {
     static contextTypes = {
         router: React.PropTypes.object
     }
@@ -21,7 +21,7 @@ class SignInForm extends Component {
     }
 
     handleSubmit(formValues) {
-        this.props.singInUser(formValues);
+        this.props.registerUser(formValues);
     }
 
     render() {
@@ -37,7 +37,6 @@ class SignInForm extends Component {
             }
         };
         const { handleSubmit } = this.props;
-
         return (
             <form onSubmit={handleSubmit(this.handleSubmit.bind(this))}>
                 <div>
@@ -57,21 +56,24 @@ class SignInForm extends Component {
                         type="password"
                         underlineFocusStyle={{ ...style.focus }}
                         floatingLabelStyle={{ ...style.floatingLabel }} />
-
                 </div>
-                <div className="login-page__error">
+                <div>
+                    <Field
+                        name="confirmPassword"
+                        component={TextField}
+                        floatingLabelText="Confirm password"
+                        type="password"
+                        underlineFocusStyle={{ ...style.focus }}
+                        floatingLabelStyle={{ ...style.floatingLabel }} />
+                </div>
+                <div className="register-page__error">
                     {this.props.errorMessage ? this.props.errorMessage : ''}
                 </div>
-                <div className="login-page__actions">
+                <div className="register-page__login-button">
                     <FlatButton
                         type="submit"
-                        label="Sign in"
+                        label="Sign up"
                         icon={this.props.authInProgress ? <CircularProgress size={24} /> : ''}
-                        style={{ ...style.loginBtn }}
-                        />
-                    <FlatButton
-                        containerElement={<Link to="/register" />}
-                        label="Register"
                         style={{ ...style.loginBtn }}
                         />
                 </div>
@@ -82,13 +84,20 @@ class SignInForm extends Component {
 
 function mapStateToProps(state, ownProps) {
     return {
-        errorMessage: state.auth.error ? state.auth.error.message : '',
-        authInProgress: state.auth.authInProgress,
         isAuthenticated: state.auth.isAuthenticated
     }
 }
 
-export default connect(mapStateToProps, { singInUser })(reduxForm({
-    form: 'LoginForm',
-    fields: ['email', 'password']
-})(SignInForm));
+function validate(values) {
+    const errors = {};
+    if (values.password !== values.confirmPassword)
+        errors.confirmPassword = 'Passwords doesn\'t match';
+
+    return errors;
+}
+
+export default connect(mapStateToProps, { registerUser })(reduxForm({
+    form: 'RegisterForm',
+    fields: ['email', 'password', 'confirmPassword'],
+    validate: validate
+})(RegisterForm));

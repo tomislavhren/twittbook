@@ -21,8 +21,6 @@ if (token) {
   store.dispatch({
     type: AUTH_USER
   });
-} else {
-  browserHistory.push('/');
 }
 
 render(

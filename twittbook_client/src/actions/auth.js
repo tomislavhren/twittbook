@@ -55,6 +55,40 @@ export function singInUser({email, password}) {
     }
 }
 
+export function registerUser({email, password}) {
+    return (dispatch) => {
+        axios.post(`/register`, queryStringify({ email, password }))
+            .then(res => {
+                const facebook = res.data.user.facebook || null;
+                let user_profile_img = '';
+                if (facebook) {
+                    //check if token expired
+                    res.data.user.facebook.hasExpired = checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn);
+                    user_profile_img = facebook.picture.data.url;
+                }
+                // save tokens
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('user_profile_img', user_profile_img);
+
+                // update state with isAuth
+                dispatch({ type: AUTH_USER });
+                dispatch({ type: USER_DATA, user: res.data.user });
+                // redirect to home
+                browserHistory.push('/user');
+            })
+            .catch((err) => {
+                // error
+                if (!err.response) {
+                    dispatch(authError({
+                        message: 'Login is temporarily unavailable. Please try again later.'
+                    }));
+                } else {
+                    dispatch(authError(err.response.data));
+                }
+            });
+    }
+}
+
 export function signOutUser() {
     // remove token from local storage
     localStorage.removeItem('token');
