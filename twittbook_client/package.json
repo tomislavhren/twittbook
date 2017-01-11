@@ -5,6 +5,7 @@
   "devDependencies": {
     "react-scripts": "0.8.4"
   },
+  "homepage": "https://tomislavhren.github.io/twittbook/",
   "dependencies": {
     "axios": "^0.15.3",
     "fb-react-sdk": "^1.0.4",
