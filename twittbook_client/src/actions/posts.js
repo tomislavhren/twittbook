@@ -70,30 +70,19 @@ function fetchTweets() {
 }
 
 export function postAPost(status) {
-    return (dispatch) => {
-        axios.all([postToFacebook(status), tweetToTwitter(status)])
-            .then(axios.spread((fbRes, twRes) => {
-                fetchPosts();
-                dispatch({
-                    type: POSTED_POST
-                });
-            }));
-    }
+    const req = axios.all([postToFacebook(status), tweetToTwitter(status)]);
+    return ({
+        type: POSTED_POST,
+        payload: req
+    });
 }
 
-export function postAPostWithImage(image, status) {
-    return (dispatch) => {
-        axios.all([postToFacebookWithImage(image, status), tweetToTwitterWihImage(image, status)])
-            .then(axios.spread((fbRes, twRes) => {
-                fetchPosts();
-
-                console.log(fbRes);
-                console.log(twRes);
-                dispatch({
-                    type: POSTED_POST
-                });
-            }));
-    }
+export function postAPostWithImage(image, status, resetForm) {
+    const req = axios.all([postToFacebookWithImage(image, status), tweetToTwitterWihImage(image, status)]);
+    return ({
+        type: POSTED_POST,
+        payload: req
+    });
 }
 
 function postToFacebook(status) {

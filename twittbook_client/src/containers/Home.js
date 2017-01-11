@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PostCard from '../components/PostCard';
 import { connect } from 'react-redux';
 import '../styles/Home.css';
-import NewPost from '../components/NewPost';
+// import NewPost from '../components/NewPost';
+import NewPost2 from '../components/NewPost2';
 import { fetchPosts, postAPost, postAPostWithImage } from '../actions/posts';
 import { obtainTwitterToken } from '../actions/auth';
 import Divider from 'material-ui/Divider';
@@ -11,11 +12,7 @@ import TokenExpiredDialog from '../components/TokenExpiredDialog';
 
 // responsible for fetching posts
 class Home extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    componentWillMount() {
+    componentDidMount() {
         this.props.fetchPosts();
     }
 
@@ -57,15 +54,15 @@ class Home extends Component {
     }
 
     handleSubmit({status, image}) {
-        if (!image) this.props.postAPost(status);
-        else this.props.postAPostWithImage(image, status);
+        if (!image) this.props.postAPost(status).then(() => { this.props.fetchPosts() });
+        else this.props.postAPostWithImage(image[0], status).then(() => { this.props.fetchPosts() });
     }
 
     render() {
         return (
             <div className="home__container">
                 <div className="home-posts__new-post">
-                    <NewPost handleSubmit={(msg) => this.handleSubmit(msg)} />
+                    <NewPost2 onSubmit={this.handleSubmit.bind(this)} />
                 </div>
                 <div className="home-posts__container">
                     {this.renderPosts()}
@@ -77,10 +74,10 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { user } = state.auth;
+    const { user = {}} = state.auth;
     return {
         posts: state.posts,
-        hasExpired: user.hasOwnProperty('facebook') ? user.facebook.hasExpired : true
+        hasExpired: !user.hasOwnProperty('facebook') ? false : user.facebook.hasExpired
     };
 }
 

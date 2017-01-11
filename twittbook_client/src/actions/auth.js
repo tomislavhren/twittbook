@@ -63,6 +63,9 @@ export function registerUser({email, password}) {
     return (dispatch) => {
         axios.post(`/register`, queryStringify({ email, password }))
             .then(res => {
+                //clear local storage
+                localStorage.clear();
+
                 let {user, token} = res.data;
                 let user_profile_img = '';
                 const facebook = user.facebook || null;
@@ -74,7 +77,6 @@ export function registerUser({email, password}) {
                     user_profile_img = facebook.picture.data.url;
                 }
                 // save tokens
-                localStorage.clear();
                 localStorage.setItem('token', token);
                 localStorage.setItem('user_profile_img', user_profile_img);
 
@@ -195,8 +197,8 @@ function authError(error) {
 }
 
 function checkIfFBTokenExpired(lastTokenUpdate, expiresIn) {
-    const expireDate = new Date(lastTokenUpdate);
-    expireDate.setSeconds(expireDate.getSeconds() + expiresIn);
+    let expireDate = new Date(lastTokenUpdate);
+    expireDate = new Date(expireDate.setSeconds(expireDate.getSeconds() + expiresIn));
     const now = new Date();
 
     if (now > expireDate) return true;

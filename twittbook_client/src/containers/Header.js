@@ -12,6 +12,7 @@ class Header extends Component {
     return (
       <div>
         <AppBar
+          title="Twittbook"
           style={hideIfSignIn}
           iconElementRight={
             isAuthenticated ? <Logged /> : <div />

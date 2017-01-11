@@ -7,7 +7,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import Home from './containers/Home';
 import UserProfile from './containers/UserProfile';
-import RequireAuth from './utils/Require_auth';
+import RequireAuth from './utils/RequireAuth';
 import SuccessfulTwitterAuth from './containers/SuccessfulTwitterAuth';
 
 export default (
