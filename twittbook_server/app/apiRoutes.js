@@ -382,8 +382,11 @@ module.exports = function (apiRoutes, jwt, formidable) {
                             access_token_secret: user.twitter.accessTokenSecret,
                             timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
                         })
+                        var status = req.body.status
+                        if (status.length > 140)
+                            status = status.slice(0, 137) + '...';
 
-                        Tw.post('statuses/update', { status: req.body.status }, function (err, data, response) {
+                        Tw.post('statuses/update', { status: status }, function (err, data, response) {
                             console.log(data)
                             res.json({
                                 success: true,
@@ -450,7 +453,10 @@ module.exports = function (apiRoutes, jwt, formidable) {
                                                 Tw.post('media/metadata/create', meta_params, function (err, data, response) {
                                                     if (!err) {
                                                         // now we can reference the media and post a tweet (media will attach to the tweet)
-                                                        var params = { status: fields.status, media_ids: [mediaIdStr] }
+                                                        var status = fields.status
+                                                        if (status.length > 140)
+                                                            status = status.slice(0, 137) + '...';
+                                                        var params = { status: status, media_ids: [mediaIdStr] }
 
                                                         Tw.post('statuses/update', params, function (err, data, response) {
                                                             res.json({
