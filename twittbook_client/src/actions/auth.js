@@ -24,13 +24,14 @@ export function singInUser({email, password}) {
             .then(res => {
                 let {user, token} = res.data;
                 let user_profile_img = '';
-                const facebook = user.facebook || null;
+                const facebook = user.hasOwnProperty('facebook') ? user.facebook : null;
                 if (facebook) {
                     //check if token expired
                     Object.assign(user.facebook, {
                         hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
                     });
-                    user_profile_img = facebook.picture.data.url;
+                    user_profile_img = facebook.hasOwnProperty('picture') ? facebook.picture.data.url : '';
+                    localStorage.setItem('fbAccessToken', facebook.accessToken || '');
                 }
                 // save tokens
                 axios.defaults.headers['x-access-token'] = token;
@@ -68,13 +69,13 @@ export function registerUser({email, password}) {
 
                 let {user, token} = res.data;
                 let user_profile_img = '';
-                const facebook = user.facebook || null;
+                const facebook = user.hasOwnProperty('facebook') ? user.facebook : null;
                 if (facebook) {
                     //check if token expired
                     Object.assign(user.facebook, {
                         hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
                     });
-                    user_profile_img = facebook.picture.data.url;
+                    user_profile_img = facebook.hasOwnProperty('picture') ? facebook.picture.data.url : '';
                 }
                 // save tokens
                 localStorage.setItem('token', token);
@@ -130,13 +131,14 @@ export function getUserData() {
             .then(res => {
                 let {user} = res.data;
                 let user_profile_img = '';
-                const facebook = user.facebook || null;
+                const facebook = user.hasOwnProperty('facebook') ? user.facebook : null;
                 if (facebook) {
                     //check if token expired
                     Object.assign(user.facebook, {
                         hasExpired: checkIfFBTokenExpired(facebook.lastTokenUpdate, facebook.expiresIn)
                     });
-                    user_profile_img = facebook.picture.data.url;
+                    user_profile_img = facebook.hasOwnProperty('picture') ? facebook.picture.data.url : '';
+                    localStorage.setItem('fbAccessToken', facebook.accessToken || '');
                 }
                 // update state with isAuth
                 dispatch({ type: USER_DATA, user });

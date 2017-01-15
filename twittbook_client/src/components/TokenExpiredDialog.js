@@ -10,21 +10,13 @@ import { Link } from 'react-router';
  *
  * You can also close this dialog by clicking outside the dialog, or with the 'Esc' key.
  */
-export default class ShowMoreDialog extends Component {
+export default class TokenExpiredDialog extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            open: this.props.open
-        }
     }
 
-    handleOpen() {
-        this.setState({ open: true });
-    };
-
     handleClose() {
-        this.setState({ open: false });
+        
     }
 
     render() {
@@ -39,7 +31,7 @@ export default class ShowMoreDialog extends Component {
             <Dialog
                 actions={action}
                 modal={false}
-                open={this.state.open}
+                open={this.props.open}
                 onRequestClose={this.handleClose.bind(this)}
                 >
                 Please reconnect your Facebook account in order to receive and submit posts.

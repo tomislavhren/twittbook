@@ -69,11 +69,17 @@ class RegisterForm extends Component {
                 <div className="register-page__error">
                     {this.props.errorMessage ? this.props.errorMessage : ''}
                 </div>
-                <div className="register-page__login-button">
+                <div className="register-page__actions">
                     <FlatButton
                         type="submit"
                         label="Sign up"
                         icon={this.props.authInProgress ? <CircularProgress size={24} /> : ''}
+                        style={{ ...style.loginBtn }}
+                        />
+                    <FlatButton
+                        type="button"
+                        label="Back"
+                        containerElement={<Link to="/" />}
                         style={{ ...style.loginBtn }}
                         />
                 </div>

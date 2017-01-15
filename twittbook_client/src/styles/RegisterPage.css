@@ -42,13 +42,27 @@
     color: white !important;
 }
 
-.register-page__register-button {
-    align-self: center;
-    margin-top: 16px;
+.register-page__actions {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    align-content: center;
+    padding-top: 16px;
 }
 
 .register-page__error {
     text-align: left;
     color: white;
     font-size: 12px;
+}
+
+.slideRight-enter {
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+.slideRight-enter-active {
+    opacity: 1;
+    transform: none;
+    transition: .2s ease-in all;
 }

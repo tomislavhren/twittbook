@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import RegisterForm from '../containers/RegisterForm';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class RegisterPage extends Component {
     render() {
@@ -22,7 +23,7 @@ class RegisterPage extends Component {
                         <RegisterForm />
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 }

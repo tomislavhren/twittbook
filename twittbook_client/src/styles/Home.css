@@ -35,6 +35,28 @@
     color: rgba(0,0,0,.54);
 }
 
+.fadeIn-enter {
+    opacity: 0;
+    transform: translateY(32px);
+}
+
+.fadeIn-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: .2s ease-in all;
+}
+
+.fadeInPost-enter {
+    opacity: 0;
+    transform: translateY(-16px);
+}
+
+.fadeInPost-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: .2s ease-in all;
+}
+
 @media only screen and (max-width: 500px) {
     .home-posts__container {
         width: 95vw;

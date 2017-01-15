@@ -22,6 +22,8 @@
 
 .new-post__card {
     width: 40vw;
+    position: absolute;
+    top: 128px;
 }
 
 #upload-image {
@@ -34,7 +36,26 @@
     width: 100%;
     opacity: 0;
     display: none;
-  }
+}
+
+.new-post__upload-chip {
+    transition: .24s ease all;
+}
+
+.new-post__successful-upload {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    color: rgba(255,255,255, .94);
+}
+
+.new-post__successful-upload > * {
+    margin-left: 8px;
+    align-self: center;
+}
 
 @media only screen and (max-width: 500px) {
     .new-post__card {

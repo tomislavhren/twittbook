@@ -2,7 +2,8 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import {
     FETCH_POSTS,
-    POSTED_POST
+    POSTED_POST,
+    POSTING_IN_PROGRESS
 } from '../constants/action_types';
 import queryStringify from '../utils/queryStringify';
 
@@ -11,7 +12,6 @@ const FB_ROOT_URL = 'https://graph.facebook.com/v2.8';
 
 export function fetchPosts() {
     return (dispatch) => {
-
         axios.all([fetchFacebookPosts(), fetchTweets()])
             .then(axios.spread((fb, tw) => {
 
